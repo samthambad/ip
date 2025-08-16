@@ -100,6 +100,7 @@ public class Sisyphus {
             System.out.println(divider);
 
             String taskString = "";
+            boolean recordTask = true;
             switch (inputArr[0]) {
                 case "bye":
                     System.out.println("    See you!");
@@ -148,7 +149,6 @@ public class Sisyphus {
                     System.out.println("    You now have " + todoList.size() + " tasks in the list.");
                     break;
                 case "deadline":
-                    boolean recordTask = true;
                     String deadlineString = "";
                     for (int i = 0; i < inputArr.length; i++) {
                         if (i == 0)
@@ -166,6 +166,33 @@ public class Sisyphus {
                     DeadlineTask newDeadlineTask = new DeadlineTask(taskString, deadlineString);
                     todoList.add(newDeadlineTask);
                     System.out.println("    added: " + newDeadlineTask);
+                    System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                    break;
+                case "event":
+                    boolean recordFrom = true;
+                    String fromString = "";
+                    String toString = "";
+                    for (int i = 0; i < inputArr.length; i++) {
+                        if (i == 0)
+                            continue;
+                        else if (inputArr[i].equals("/from")) {
+                            recordTask = false;
+                            continue;
+                        } else if (inputArr[i].equals("/to")) {
+                            recordFrom = false;
+                            continue;
+                        }
+                        if (recordTask) {
+                            taskString += inputArr[i] + " ";
+                        } else if (recordFrom) {
+                            fromString += inputArr[i] + " ";
+                        } else {
+                            toString += inputArr[i] + " ";
+                        }
+                    }
+                    EventTask newEventTask = new EventTask(taskString, fromString, toString);
+                    todoList.add(newEventTask);
+                    System.out.println("    added: " + newEventTask);
                     System.out.println("    You now have " + todoList.size() + " tasks in the list.");
                     break;
                 default:
