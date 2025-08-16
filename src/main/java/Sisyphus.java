@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 public class Sisyphus {
+  static String divider = "-----------------------------";
   public static void printList(ArrayList<String> todoList, ArrayList<Boolean> doneList) {
     for (int i = 0; i < todoList.size(); i++) {
       int listIndex = i + 1;
@@ -11,22 +12,24 @@ public class Sisyphus {
       }
     }
   }
-    public static void main(String[] args) {
-        String logo = """
-        ░▒▓███████▓▒░▒▓█▓▒░░▒▓███████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓███████▓▒░ 
-        ░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░        
-        ░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░        
-        ░▒▓██████▓▒░░▒▓█▓▒░░▒▓██████▓▒░ ░▒▓██████▓▒░░▒▓███████▓▒░░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░  
-              ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░ 
-              ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░ 
-        ░▒▓███████▓▒░░▒▓█▓▒░▒▓███████▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓███████▓▒░  
-          """;
-        String divider = "-----------------------------";
-        String welcomeMessage = "Hello, I am Sisyphus, what can I do for you?";
-        System.out.println(logo);
-        System.out.println(welcomeMessage);
-        System.out.println(divider);
 
+  public static void introMessage() {
+    String logo = """
+    ░▒▓███████▓▒░▒▓█▓▒░░▒▓███████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓███████▓▒░ 
+    ░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░        
+    ░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░        
+    ░▒▓██████▓▒░░▒▓█▓▒░░▒▓██████▓▒░ ░▒▓██████▓▒░░▒▓███████▓▒░░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░  
+          ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░ 
+          ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░ 
+    ░▒▓███████▓▒░░▒▓█▓▒░▒▓███████▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓███████▓▒░  
+      """;
+    String welcomeMessage = "Hello, I am Sisyphus, what can I do for you?";
+    System.out.println(logo);
+    System.out.println(welcomeMessage);
+    System.out.println(divider);
+  }
+    public static void main(String[] args) {
+        introMessage();
         ArrayList<String> todoList = new ArrayList<String>();
         ArrayList<Boolean> doneList = new ArrayList<>();
         String input = "";
@@ -43,19 +46,24 @@ public class Sisyphus {
               printList(todoList, doneList);
               break;
             case "mark":
-              if (inputArr[1].length() > 0) {
+              if (inputArr[1].length() > 0 && inputArr[1] <= todoList.size()) {
                 int number = Integer.parseInt(inputArr[1]);
                 doneList.set(number-1, true);
                 System.out.println("Okay, task " + number + " is done");
                 printList(todoList, doneList);
+              } else {
+                System.out.println("Task " + inputArr[1] + " does not exist")
               }
               break;
             case "unmark":
-              if (inputArr[1].length() > 0) {
+              if (inputArr[1].length() > 0 && inputArr[1] <= todoList.size()) {
                 int number = Integer.parseInt(inputArr[1]);
                 doneList.set(number-1, false);
                 System.out.println("Okay, task " + number + " is not done yet");
                 printList(todoList, doneList);
+              }
+              } else {
+                System.out.println("Task " + inputArr[1] + " does not exist")
               }
               break;
             default:
