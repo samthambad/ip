@@ -55,6 +55,22 @@ public class Sisyphus {
         }
     }
 
+    public static class EventTask extends Task {
+        private String start;
+        private String end;
+
+        public EventTask(String name, String start, String end) {
+            super(name);
+            this.start = start;
+            this.end = end;
+        }
+
+        public String toString() {
+            return "[E] " + super.toString() + " ( from: " + this.start + " to: " + this.end + ")";
+        }
+
+    }
+
     static String divider = "-----------------------------";
 
     public static void introMessage() {
