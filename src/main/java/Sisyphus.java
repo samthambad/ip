@@ -40,7 +40,6 @@ public class Sisyphus {
         public String toString() {
             return "[T] " + super.toString();
         }
-
     }
 
     static String divider = "-----------------------------";
@@ -107,7 +106,16 @@ public class Sisyphus {
                     }
                     break;
                 case "todo":
-
+                    String taskString = "";
+                    for (int i = 0; i < inputArr.length; i++) {
+                        if (i == 0)
+                            continue;
+                        taskString += inputArr[i] + " ";
+                    }
+                    TodoTask newTodoTask = new TodoTask(taskString);
+                    todoList.add(newTodoTask);
+                    System.out.println("    added: " + newTodoTask);
+                    System.out.println("    You now have " + todoList.size() + " tasks in the list.");
                     break;
                 default:
                     if (input.length() == 0)
