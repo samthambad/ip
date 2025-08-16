@@ -42,6 +42,19 @@ public class Sisyphus {
         }
     }
 
+    public static class DeadlineTask extends Task {
+        private String deadline;
+
+        public DeadlineTask(String name, String deadline) {
+            super(name);
+            this.deadline = deadline;
+        }
+
+        public String toString() {
+            return "[D] " + super.toString() + " ( by:" + this.deadline + ")";
+        }
+    }
+
     static String divider = "-----------------------------";
 
     public static void introMessage() {
@@ -69,6 +82,8 @@ public class Sisyphus {
             input = myObj.nextLine();
             String[] inputArr = input.split(" ");
             System.out.println(divider);
+
+            String taskString = "";
             switch (inputArr[0]) {
                 case "bye":
                     System.out.println("    See you!");
@@ -106,7 +121,6 @@ public class Sisyphus {
                     }
                     break;
                 case "todo":
-                    String taskString = "";
                     for (int i = 0; i < inputArr.length; i++) {
                         if (i == 0)
                             continue;
@@ -115,6 +129,27 @@ public class Sisyphus {
                     TodoTask newTodoTask = new TodoTask(taskString);
                     todoList.add(newTodoTask);
                     System.out.println("    added: " + newTodoTask);
+                    System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                    break;
+                case "deadline":
+                    boolean recordTask = true;
+                    String deadlineString = "";
+                    for (int i = 0; i < inputArr.length; i++) {
+                        if (i == 0)
+                            continue;
+                        else if (inputArr[i].equals("/by")) {
+                            recordTask = false;
+                            continue;
+                        }
+                        if (recordTask) {
+                            taskString += inputArr[i] + " ";
+                        } else {
+                            deadlineString += inputArr[i] + " ";
+                        }
+                    }
+                    DeadlineTask newDeadlineTask = new DeadlineTask(taskString, deadlineString);
+                    todoList.add(newDeadlineTask);
+                    System.out.println("    added: " + newDeadlineTask);
                     System.out.println("    You now have " + todoList.size() + " tasks in the list.");
                     break;
                 default:
