@@ -31,6 +31,18 @@ public class Sisyphus {
         }
     }
 
+    public static class TodoTask extends Task {
+
+        public TodoTask(String name) {
+            super(name);
+        }
+
+        public String toString() {
+            return "[T] " + super.toString();
+        }
+
+    }
+
     static String divider = "-----------------------------";
 
     public static void introMessage() {
@@ -93,6 +105,9 @@ public class Sisyphus {
                     } else {
                         System.out.println("Task " + inputArr[1] + " does not exist");
                     }
+                    break;
+                case "todo":
+
                     break;
                 default:
                     if (input.length() == 0)
