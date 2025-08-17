@@ -219,6 +219,26 @@ public class Sisyphus {
                     System.out.println("    added: " + newEventTask);
                     System.out.println("    You now have " + todoList.size() + " tasks in the list.");
                     break;
+                case "delete":
+                    if (inputArr.length == 1) {
+                        System.out.println("Task to delete has not been specified!");
+                        break;
+                    } else if (inputArr.length > 2) {
+                        System.out.println("Incorrect input!");
+                        break;
+                    } else if (todoList.size() == 0) {
+                        System.out.println("There aren't any tasks to delete!");
+                        break;
+                    }
+                    int taskToDelete = Integer.parseInt(inputArr[1]);
+                    if (taskToDelete > todoList.size() || taskToDelete < 0) {
+                        System.out.println("The task to delete does not exist!");
+                        break;
+                    }
+                    System.out.println("I have removed this task: " + todoList.get(taskToDelete - 1));
+                    todoList.remove(taskToDelete - 1);
+                    System.out.println("You now have " + todoList.size() + " tasks in the list.");
+                    break;
                 default:
                     System.out.println("    Invalid command, you are wrong.");
                     break;
