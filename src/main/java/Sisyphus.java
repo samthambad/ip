@@ -138,6 +138,10 @@ public class Sisyphus {
                     }
                     break;
                 case "todo":
+                    if (inputArr.length == 1) {
+                        System.out.println("The description of a todo cannot be empty!");
+                        break;
+                    }
                     for (int i = 0; i < inputArr.length; i++) {
                         if (i == 0)
                             continue;
@@ -149,6 +153,10 @@ public class Sisyphus {
                     System.out.println("    You now have " + todoList.size() + " tasks in the list.");
                     break;
                 case "deadline":
+                    if (inputArr.length == 1) {
+                        System.out.println("The description of a deadline task cannot be empty!");
+                        break;
+                    }
                     String deadlineString = "";
                     for (int i = 0; i < inputArr.length; i++) {
                         if (i == 0)
@@ -163,12 +171,20 @@ public class Sisyphus {
                             deadlineString += inputArr[i] + " ";
                         }
                     }
+                    if (deadlineString.length() == 0) {
+                        System.out.println("No deadline specified!");
+                        break;
+                    }
                     DeadlineTask newDeadlineTask = new DeadlineTask(taskString, deadlineString);
                     todoList.add(newDeadlineTask);
                     System.out.println("    added: " + newDeadlineTask);
                     System.out.println("    You now have " + todoList.size() + " tasks in the list.");
                     break;
                 case "event":
+                    if (inputArr.length == 1) {
+                        System.out.println("The description of a event task cannot be empty!");
+                        break;
+                    }
                     boolean recordFrom = true;
                     String fromString = "";
                     String toString = "";
@@ -190,17 +206,21 @@ public class Sisyphus {
                             toString += inputArr[i] + " ";
                         }
                     }
+                    if (fromString.length() == 0) {
+                        System.out.println("No from specified!");
+                        break;
+                    }
+                    if (toString.length() == 0) {
+                        System.out.println("No to specified!");
+                        break;
+                    }
                     EventTask newEventTask = new EventTask(taskString, fromString, toString);
                     todoList.add(newEventTask);
                     System.out.println("    added: " + newEventTask);
                     System.out.println("    You now have " + todoList.size() + " tasks in the list.");
                     break;
                 default:
-                    if (input.length() == 0)
-                        break;
-                    Task newTask = new Task(input);
-                    todoList.add(newTask);
-                    System.out.println("    added: " + input);
+                    System.out.println("    Invalid command, you are wrong.");
                     break;
             }
             System.out.println(divider);
