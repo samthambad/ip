@@ -1,13 +1,50 @@
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Sisyphus {
+
+    public static class DataManager {
+        private String DATA_PATH = "../../../data.txt";
+
+        public void saveFile(ArrayList<Task> listToSave) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(DATA_PATH))) {
+                for (Task t : listToSave) {
+                    String taskName = t.getName();
+                    int isDone = t.isDone() ? 1 : 0;
+
+                    String taskType = t.getClass().getSimpleName();
+                    switch (taskType) {
+                    case "TodoTask":
+                        writer.println("T | " + isDone + " | " + taskName);
+                        break;
+                    case "DeadlineTask":
+                        break;
+                    case "EventTask":
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Error saving file: "+ e.getMessage());
+            }
+        }
+        public boolean readFile() {
+            return false;
+        }
+    }
+
     public static class Task {
         private String name;
         private Boolean isDone = false;
 
         public Task(String name) {
             this.name = name;
+        }
+
+        public boolean isDone() {
+            return this.isDone;
         }
 
         public String getName() {
@@ -102,146 +139,146 @@ public class Sisyphus {
             String taskString = "";
             boolean recordTask = true;
             switch (inputArr[0]) {
-                case "bye":
-                    System.out.println("    See you!");
-                    break;
-                case "list":
+            case "bye":
+                System.out.println("    See you!");
+                break;
+            case "list":
+                for (int i = 0; i < todoList.size(); i++) {
+                    int listIdx = i + 1;
+                    System.out.println("    " + listIdx + "." + todoList.get(i));
+                }
+                break;
+            case "mark":
+                if (inputArr[1].length() > 0 && Integer.parseInt(inputArr[1]) <= todoList.size()) {
+                    int number = Integer.parseInt(inputArr[1]);
+                    todoList.get(number - 1).complete();
+                    System.out.println("Okay, task " + number + " is done");
                     for (int i = 0; i < todoList.size(); i++) {
                         int listIdx = i + 1;
                         System.out.println("    " + listIdx + "." + todoList.get(i));
                     }
-                    break;
-                case "mark":
-                    if (inputArr[1].length() > 0 && Integer.parseInt(inputArr[1]) <= todoList.size()) {
-                        int number = Integer.parseInt(inputArr[1]);
-                        todoList.get(number - 1).complete();
-                        System.out.println("Okay, task " + number + " is done");
-                        for (int i = 0; i < todoList.size(); i++) {
-                            int listIdx = i + 1;
-                            System.out.println("    " + listIdx + "." + todoList.get(i));
-                        }
-                    } else {
-                        System.out.println("Task " + inputArr[1] + " does not exist");
+                } else {
+                    System.out.println("Task " + inputArr[1] + " does not exist");
+                }
+                break;
+            case "unmark":
+                if (inputArr[1].length() > 0 && Integer.parseInt(inputArr[1]) <= todoList.size()) {
+                    int number = Integer.parseInt(inputArr[1]);
+                    todoList.get(number - 1).incomplete();
+                    System.out.println("Okay, task " + number + " is not done yet");
+                    for (int i = 0; i < todoList.size(); i++) {
+                        int listIdx = i + 1;
+                        System.out.println("    " + listIdx + "." + todoList.get(i));
                     }
+                } else {
+                    System.out.println("Task " + inputArr[1] + " does not exist");
+                }
+                break;
+            case "todo":
+                if (inputArr.length == 1) {
+                    System.out.println("The description of a todo cannot be empty!");
                     break;
-                case "unmark":
-                    if (inputArr[1].length() > 0 && Integer.parseInt(inputArr[1]) <= todoList.size()) {
-                        int number = Integer.parseInt(inputArr[1]);
-                        todoList.get(number - 1).incomplete();
-                        System.out.println("Okay, task " + number + " is not done yet");
-                        for (int i = 0; i < todoList.size(); i++) {
-                            int listIdx = i + 1;
-                            System.out.println("    " + listIdx + "." + todoList.get(i));
-                        }
-                    } else {
-                        System.out.println("Task " + inputArr[1] + " does not exist");
-                    }
+                }
+                for (int i = 0; i < inputArr.length; i++) {
+                    if (i == 0)
+                        continue;
+                    taskString += inputArr[i] + " ";
+                }
+                TodoTask newTodoTask = new TodoTask(taskString);
+                todoList.add(newTodoTask);
+                System.out.println("    added: " + newTodoTask);
+                System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                break;
+            case "deadline":
+                if (inputArr.length == 1) {
+                    System.out.println("The description of a deadline task cannot be empty!");
                     break;
-                case "todo":
-                    if (inputArr.length == 1) {
-                        System.out.println("The description of a todo cannot be empty!");
-                        break;
+                }
+                String deadlineString = "";
+                for (int i = 0; i < inputArr.length; i++) {
+                    if (i == 0)
+                        continue;
+                    else if (inputArr[i].equals("/by")) {
+                        recordTask = false;
+                        continue;
                     }
-                    for (int i = 0; i < inputArr.length; i++) {
-                        if (i == 0)
-                            continue;
+                    if (recordTask) {
                         taskString += inputArr[i] + " ";
+                    } else {
+                        deadlineString += inputArr[i] + " ";
                     }
-                    TodoTask newTodoTask = new TodoTask(taskString);
-                    todoList.add(newTodoTask);
-                    System.out.println("    added: " + newTodoTask);
-                    System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                }
+                if (deadlineString.length() == 0) {
+                    System.out.println("No deadline specified!");
                     break;
-                case "deadline":
-                    if (inputArr.length == 1) {
-                        System.out.println("The description of a deadline task cannot be empty!");
-                        break;
-                    }
-                    String deadlineString = "";
-                    for (int i = 0; i < inputArr.length; i++) {
-                        if (i == 0)
-                            continue;
-                        else if (inputArr[i].equals("/by")) {
-                            recordTask = false;
-                            continue;
-                        }
-                        if (recordTask) {
-                            taskString += inputArr[i] + " ";
-                        } else {
-                            deadlineString += inputArr[i] + " ";
-                        }
-                    }
-                    if (deadlineString.length() == 0) {
-                        System.out.println("No deadline specified!");
-                        break;
-                    }
-                    DeadlineTask newDeadlineTask = new DeadlineTask(taskString, deadlineString);
-                    todoList.add(newDeadlineTask);
-                    System.out.println("    added: " + newDeadlineTask);
-                    System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                }
+                DeadlineTask newDeadlineTask = new DeadlineTask(taskString, deadlineString);
+                todoList.add(newDeadlineTask);
+                System.out.println("    added: " + newDeadlineTask);
+                System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                break;
+            case "event":
+                if (inputArr.length == 1) {
+                    System.out.println("The description of a event task cannot be empty!");
                     break;
-                case "event":
-                    if (inputArr.length == 1) {
-                        System.out.println("The description of a event task cannot be empty!");
-                        break;
+                }
+                boolean recordFrom = true;
+                String fromString = "";
+                String toString = "";
+                for (int i = 0; i < inputArr.length; i++) {
+                    if (i == 0)
+                        continue;
+                    else if (inputArr[i].equals("/from")) {
+                        recordTask = false;
+                        continue;
+                    } else if (inputArr[i].equals("/to")) {
+                        recordFrom = false;
+                        continue;
                     }
-                    boolean recordFrom = true;
-                    String fromString = "";
-                    String toString = "";
-                    for (int i = 0; i < inputArr.length; i++) {
-                        if (i == 0)
-                            continue;
-                        else if (inputArr[i].equals("/from")) {
-                            recordTask = false;
-                            continue;
-                        } else if (inputArr[i].equals("/to")) {
-                            recordFrom = false;
-                            continue;
-                        }
-                        if (recordTask) {
-                            taskString += inputArr[i] + " ";
-                        } else if (recordFrom) {
-                            fromString += inputArr[i] + " ";
-                        } else {
-                            toString += inputArr[i] + " ";
-                        }
+                    if (recordTask) {
+                        taskString += inputArr[i] + " ";
+                    } else if (recordFrom) {
+                        fromString += inputArr[i] + " ";
+                    } else {
+                        toString += inputArr[i] + " ";
                     }
-                    if (fromString.length() == 0) {
-                        System.out.println("No from specified!");
-                        break;
-                    }
-                    if (toString.length() == 0) {
-                        System.out.println("No to specified!");
-                        break;
-                    }
-                    EventTask newEventTask = new EventTask(taskString, fromString, toString);
-                    todoList.add(newEventTask);
-                    System.out.println("    added: " + newEventTask);
-                    System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                }
+                if (fromString.length() == 0) {
+                    System.out.println("No from specified!");
                     break;
-                case "delete":
-                    if (inputArr.length == 1) {
-                        System.out.println("Task to delete has not been specified!");
-                        break;
-                    } else if (inputArr.length > 2) {
-                        System.out.println("Incorrect input!");
-                        break;
-                    } else if (todoList.size() == 0) {
-                        System.out.println("There aren't any tasks to delete!");
-                        break;
-                    }
-                    int taskToDelete = Integer.parseInt(inputArr[1]);
-                    if (taskToDelete > todoList.size() || taskToDelete < 0) {
-                        System.out.println("The task to delete does not exist!");
-                        break;
-                    }
-                    System.out.println("I have removed this task: " + todoList.get(taskToDelete - 1));
-                    todoList.remove(taskToDelete - 1);
-                    System.out.println("You now have " + todoList.size() + " tasks in the list.");
+                }
+                if (toString.length() == 0) {
+                    System.out.println("No to specified!");
                     break;
-                default:
-                    System.out.println("    Invalid command, you are wrong.");
+                }
+                EventTask newEventTask = new EventTask(taskString, fromString, toString);
+                todoList.add(newEventTask);
+                System.out.println("    added: " + newEventTask);
+                System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                break;
+            case "delete":
+                if (inputArr.length == 1) {
+                    System.out.println("Task to delete has not been specified!");
                     break;
+                } else if (inputArr.length > 2) {
+                    System.out.println("Incorrect input!");
+                    break;
+                } else if (todoList.size() == 0) {
+                    System.out.println("There aren't any tasks to delete!");
+                    break;
+                }
+                int taskToDelete = Integer.parseInt(inputArr[1]);
+                if (taskToDelete > todoList.size() || taskToDelete < 0) {
+                    System.out.println("The task to delete does not exist!");
+                    break;
+                }
+                System.out.println("I have removed this task: " + todoList.get(taskToDelete - 1));
+                todoList.remove(taskToDelete - 1);
+                System.out.println("You now have " + todoList.size() + " tasks in the list.");
+                break;
+            default:
+                System.out.println("    Invalid command, you are wrong.");
+                break;
             }
             System.out.println(divider);
         }
