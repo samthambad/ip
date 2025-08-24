@@ -28,7 +28,7 @@ public class Sisyphus {
                         break;
                     case "EventTask":
                         EventTask et = (EventTask) t;
-                        writer.println("E |" + isDone + " | " + taskName + " | " + et.getStart() + " | " + et.getEnd());
+                        writer.println("E | " + isDone + " | " + taskName + " | " + et.getStart() + " | " + et.getEnd());
                         break;
                     }
                 }
