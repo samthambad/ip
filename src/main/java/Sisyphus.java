@@ -29,7 +29,7 @@ public class Sisyphus {
                         break;
                     case "DeadlineTask":
                         DeadlineTask dt = (DeadlineTask) t;
-                        writer.println("D | " + isDone + " | " + taskName + " | " + dt.getDeadline());
+                        writer.println("D | " + isDone + " | " + taskName + " | " + dt.getDeadlineString());
                         break;
                     case "EventTask":
                         EventTask et = (EventTask) t;
@@ -128,23 +128,45 @@ public class Sisyphus {
     }
 
     public static class DeadlineTask extends Task {
-        private LocalDate deadline;
+        private LocalDateTime deadline;
 
-        public DeadlineTask(String name, String deadline) {
+        private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        private static final DateTimeFormatter INPUT_DATE_ONLY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+
+        public DeadlineTask(String name, String deadlineString) throws DateTimeParseException {
             super(name);
+            // Parse the input date string (yyyy-MM-dd format)
+            this.deadline = parseDateTime(deadlineString.trim());
+        }
+
+        private LocalDateTime parseDateTime(String dateTimeString) throws DateTimeParseException {
             try {
-                this.deadline = LocalDate.parse(deadline.trim());
+                // Try parsing with time (yyyy-MM-dd HH:mm)
+                return LocalDateTime.parse(dateTimeString, INPUT_FORMAT);
             } catch (DateTimeParseException e) {
-                System.out.println("Invalid date format: " + e.getMessage());
+                try {
+                    // No time in input so set time to 00:00
+                    LocalDate date = LocalDate.parse(dateTimeString, INPUT_DATE_ONLY);
+                    return date.atStartOfDay();
+                } catch (DateTimeParseException e2) {
+                    throw new DateTimeParseException("Invalid date format. Use yyyy-MM-dd or yyyy-MM-dd HH:mm", dateTimeString, 0);
+                }
             }
         }
 
-        public String getDeadline() {
-            return this.deadline.toString();
+        public LocalDateTime getDeadline() {
+            return this.deadline;
+        }
+
+        public String getDeadlineString() {
+            return this.deadline.format(INPUT_FORMAT);
         }
 
         public String toString() {
-            return "[D] " + super.toString() + " ( by:" + this.deadline + " )";
+            // Format date for display (MMM dd yyyy format)
+            String formattedDate = this.deadline.format(OUTPUT_FORMAT);
+            return "[D] " + super.toString() + " (by: " + formattedDate + ")";
         }
     }
 
@@ -162,13 +184,12 @@ public class Sisyphus {
             this.end = parseDateTime(endString.trim());
         }
 
+        // same as in EventTask
         private LocalDateTime parseDateTime(String dateTimeString) throws DateTimeParseException {
             try {
-                // Try parsing with time (yyyy-MM-dd HH:mm)
                 return LocalDateTime.parse(dateTimeString, INPUT_FORMAT);
             } catch (DateTimeParseException e) {
                 try {
-                    // No time in input so set time to 00:00
                     LocalDate date = LocalDate.parse(dateTimeString, INPUT_DATE_ONLY);
                     return date.atStartOfDay();
                 } catch (DateTimeParseException e2) {
