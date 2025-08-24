@@ -21,8 +21,12 @@ public class Sisyphus {
                         writer.println("T | " + isDone + " | " + taskName);
                         break;
                     case "DeadlineTask":
+                        DeadlineTask dt = (DeadlineTask) t;
+                        writer.println("D | " + isDone + " | " + taskName + " | " + dt.getDeadline());
                         break;
                     case "EventTask":
+                        EventTask et = (EventTask) t;
+                        writer.println("E |" + isDone + " | " + taskName + " | " + et.getStart() + " | " + et.getEnd());
                         break;
                     }
                 }
@@ -87,6 +91,10 @@ public class Sisyphus {
             this.deadline = deadline;
         }
 
+        public String getDeadline() {
+            return this.deadline;
+        }
+
         public String toString() {
             return "[D] " + super.toString() + " ( by:" + this.deadline + ")";
         }
@@ -100,6 +108,14 @@ public class Sisyphus {
             super(name);
             this.start = start;
             this.end = end;
+        }
+
+        public String getStart() {
+            return this.start;
+        }
+
+        public String getEnd() {
+            return end;
         }
 
         public String toString() {
