@@ -1,3 +1,6 @@
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -5,6 +8,8 @@ import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class Sisyphus {
 
@@ -24,11 +29,11 @@ public class Sisyphus {
                         break;
                     case "DeadlineTask":
                         DeadlineTask dt = (DeadlineTask) t;
-                        writer.println("D | " + isDone + " | " + taskName + " | " + dt.getDeadline());
+                        writer.println("D | " + isDone + " | " + taskName + " | " + dt.getDeadlineString());
                         break;
                     case "EventTask":
                         EventTask et = (EventTask) t;
-                        writer.println("E | " + isDone + " | " + taskName + " | " + et.getStart() + " | " + et.getEnd());
+                        writer.println("E | " + isDone + " | " + taskName + " | " + et.getStartString() + " | " + et.getEndString());
                         break;
                     }
                 }
@@ -68,7 +73,7 @@ public class Sisyphus {
                         todoList.add(task);
                     }
                 }
-                System.out.println("Tasks loaded.");
+                System.out.println(todoList.size() + " tasks loaded.");
             } catch (FileNotFoundException e) {
                 System.out.println("No file found, starting fresh!");
             } catch (Exception e) {
@@ -123,46 +128,98 @@ public class Sisyphus {
     }
 
     public static class DeadlineTask extends Task {
-        private String deadline;
+        private LocalDateTime deadline;
 
-        public DeadlineTask(String name, String deadline) {
+        private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        private static final DateTimeFormatter INPUT_DATE_ONLY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+
+        public DeadlineTask(String name, String deadlineString) throws DateTimeParseException {
             super(name);
-            this.deadline = deadline;
+            // Parse the input date string (yyyy-MM-dd format)
+            this.deadline = parseDateTime(deadlineString.trim());
         }
 
-        public String getDeadline() {
+        private LocalDateTime parseDateTime(String dateTimeString) throws DateTimeParseException {
+            try {
+                // Try parsing with time (yyyy-MM-dd HH:mm)
+                return LocalDateTime.parse(dateTimeString, INPUT_FORMAT);
+            } catch (DateTimeParseException e) {
+                try {
+                    // No time in input so set time to 00:00
+                    LocalDate date = LocalDate.parse(dateTimeString, INPUT_DATE_ONLY);
+                    return date.atStartOfDay();
+                } catch (DateTimeParseException e2) {
+                    throw new DateTimeParseException("Invalid date format. Use yyyy-MM-dd or yyyy-MM-dd HH:mm", dateTimeString, 0);
+                }
+            }
+        }
+
+        public LocalDateTime getDeadline() {
             return this.deadline;
         }
 
+        public String getDeadlineString() {
+            return this.deadline.format(INPUT_FORMAT);
+        }
+
         public String toString() {
-            return "[D] " + super.toString() + " ( by:" + this.deadline + ")";
+            // Format date for display (MMM dd yyyy format)
+            String formattedDate = this.deadline.format(OUTPUT_FORMAT);
+            return "[D] " + super.toString() + " (by: " + formattedDate + ")";
         }
     }
 
     public static class EventTask extends Task {
-        private String start;
-        private String end;
+        private LocalDateTime start;
+        private LocalDateTime end;
 
-        public EventTask(String name, String start, String end) {
+        private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        private static final DateTimeFormatter INPUT_DATE_ONLY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+
+        public EventTask(String name, String startString, String endString) throws DateTimeParseException {
             super(name);
-            this.start = start;
-            this.end = end;
+            this.start = parseDateTime(startString.trim());
+            this.end = parseDateTime(endString.trim());
         }
 
-        public String getStart() {
+        // same as in EventTask
+        private LocalDateTime parseDateTime(String dateTimeString) throws DateTimeParseException {
+            try {
+                return LocalDateTime.parse(dateTimeString, INPUT_FORMAT);
+            } catch (DateTimeParseException e) {
+                try {
+                    LocalDate date = LocalDate.parse(dateTimeString, INPUT_DATE_ONLY);
+                    return date.atStartOfDay();
+                } catch (DateTimeParseException e2) {
+                    throw new DateTimeParseException("Invalid date format. Use yyyy-MM-dd or yyyy-MM-dd HH:mm", dateTimeString, 0);
+                }
+            }
+        }
+
+        public LocalDateTime getStart() {
             return this.start;
         }
 
-        public String getEnd() {
-            return end;
+        public LocalDateTime getEnd() {
+            return this.end;
+        }
+
+        public String getStartString() {
+            return this.start.format(INPUT_FORMAT);
+        }
+
+        public String getEndString() {
+            return this.end.format(INPUT_FORMAT);
         }
 
         public String toString() {
-            return "[E] " + super.toString() + " ( from: " + this.start + " to: " + this.end + ")";
+            String formattedStart = this.start.format(OUTPUT_FORMAT);
+            String formattedEnd = this.end.format(OUTPUT_FORMAT);
+            return "[E] " + super.toString() + " (from: " + formattedStart + " to: " + formattedEnd + ")";
         }
-
     }
-
     static String divider = "-----------------------------";
 
     public static void introMessage() {
@@ -176,8 +233,10 @@ public class Sisyphus {
                 ░▒▓███████▓▒░░▒▓█▓▒░▒▓███████▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓███████▓▒░
                   """;
         String welcomeMessage = "Hello, I am Sisyphus, what can I do for you?";
+        String instructions = "Enter date in yyyy-MM-dd format and date and time in yyyy-MM-dd HH:mm";
         System.out.println(logo);
         System.out.println(welcomeMessage);
+        System.out.println(instructions);
         System.out.println(divider);
     }
 
@@ -315,10 +374,14 @@ public class Sisyphus {
                     System.out.println("No to specified!");
                     break;
                 }
-                EventTask newEventTask = new EventTask(taskString, fromString, toString);
-                todoList.add(newEventTask);
-                System.out.println("    added: " + newEventTask);
-                System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                try {
+                    EventTask newEventTask = new EventTask(taskString, fromString, toString);
+                    todoList.add(newEventTask);
+                    System.out.println("    added: " + newEventTask);
+                    System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                } catch (DateTimeException e) {
+                    continue;
+                }
                 break;
             case "delete":
                 if (inputArr.length == 1) {
