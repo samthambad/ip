@@ -2,6 +2,8 @@ import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Sisyphus {
@@ -35,6 +37,42 @@ public class Sisyphus {
             }
         }
         public boolean readFile() {
+            ArrayList<Task> todoList = new ArrayList<>();
+            try (Scanner fileReader = new Scanner(new File(DATA_PATH))) {
+                while (fileReader.hasNextLine()) {
+                    String line = fileReader.nextLine();
+                    String[] parts = line.split(" \\| ");
+                    if (parts.length < 3) {
+                        continue;
+                    }
+                    String taskType = parts[0];
+                    boolean isDone = parts[1].equals("1");
+                    String taskName = parts[2];
+                    Task task = null;
+                    switch (taskType) {
+                    case "T":
+                        task = new TodoTask(taskName);
+                        break;
+                    case "D":
+                        task = new DeadlineTask(taskName, parts[3]);
+                        break;
+                    case "E":
+                        task = new EventTask(taskName, parts[3], parts[4]);
+                        break;
+                    }
+                    if (task != null) {
+                        if (isDone) {
+                            task.complete();
+                        }
+                        todoList.add(task);
+                    }
+                }
+                System.out.println("Tasks loaded.");
+            } catch (FileNotFoundException e) {
+                System.out.println("No file found, starting fresh!");
+            } catch (Exception e) {
+                System.out.println("Error reading file: " + e.getMessage());
+            }
             return false;
         }
     }
