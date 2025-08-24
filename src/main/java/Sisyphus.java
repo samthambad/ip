@@ -1,4 +1,6 @@
 import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,7 +33,7 @@ public class Sisyphus {
                         break;
                     case "EventTask":
                         EventTask et = (EventTask) t;
-                        writer.println("E | " + isDone + " | " + taskName + " | " + et.getStart() + " | " + et.getEnd());
+                        writer.println("E | " + isDone + " | " + taskName + " | " + et.getStartString() + " | " + et.getEndString());
                         break;
                     }
                 }
@@ -147,38 +149,56 @@ public class Sisyphus {
     }
 
     public static class EventTask extends Task {
-        private LocalDate start;
-        private LocalDate end;
+        private LocalDateTime start;
+        private LocalDateTime end;
 
-        public EventTask(String name, String start, String end) {
+        private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        private static final DateTimeFormatter INPUT_DATE_ONLY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+
+        public EventTask(String name, String startString, String endString) throws DateTimeParseException {
             super(name);
+            this.start = parseDateTime(startString.trim());
+            this.end = parseDateTime(endString.trim());
+        }
+
+        private LocalDateTime parseDateTime(String dateTimeString) throws DateTimeParseException {
             try {
-                if (!LocalDate.parse(start.trim()).isBefore(LocalDate.parse(end.trim()))) {
-                    throw new DateTimeException("Start is after end date!");
+                // Try parsing with time (yyyy-MM-dd HH:mm)
+                return LocalDateTime.parse(dateTimeString, INPUT_FORMAT);
+            } catch (DateTimeParseException e) {
+                try {
+                    // No time in input so set time to 00:00
+                    LocalDate date = LocalDate.parse(dateTimeString, INPUT_DATE_ONLY);
+                    return date.atStartOfDay();
+                } catch (DateTimeParseException e2) {
+                    throw new DateTimeParseException("Invalid date format. Use yyyy-MM-dd or yyyy-MM-dd HH:mm", dateTimeString, 0);
                 }
-                this.start = LocalDate.parse(start.trim());
-                this.end = LocalDate.parse(end.trim());
-            } catch (DateTimeException e) {
-                System.out.println("Invalid date format: " + e.getMessage());
-                throw e;
             }
-
         }
 
-        public String getStart() {
-            return this.start.toString();
+        public LocalDateTime getStart() {
+            return this.start;
         }
 
-        public String getEnd() {
-            return end.toString();
+        public LocalDateTime getEnd() {
+            return this.end;
+        }
+
+        public String getStartString() {
+            return this.start.format(INPUT_FORMAT);
+        }
+
+        public String getEndString() {
+            return this.end.format(INPUT_FORMAT);
         }
 
         public String toString() {
-            return "[E] " + super.toString() + " ( from: " + this.start + " to: " + this.end + " )";
+            String formattedStart = this.start.format(OUTPUT_FORMAT);
+            String formattedEnd = this.end.format(OUTPUT_FORMAT);
+            return "[E] " + super.toString() + " (from: " + formattedStart + " to: " + formattedEnd + ")";
         }
-
     }
-
     static String divider = "-----------------------------";
 
     public static void introMessage() {
@@ -192,7 +212,7 @@ public class Sisyphus {
                 ░▒▓███████▓▒░░▒▓█▓▒░▒▓███████▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓███████▓▒░
                   """;
         String welcomeMessage = "Hello, I am Sisyphus, what can I do for you?";
-        String instructions = "Enter date in yyyy-mm-dd format";
+        String instructions = "Enter date in yyyy-MM-dd format and date and time in yyyy-MM-dd HH:mm";
         System.out.println(logo);
         System.out.println(welcomeMessage);
         System.out.println(instructions);
