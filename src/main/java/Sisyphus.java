@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class Sisyphus {
 
@@ -123,15 +125,19 @@ public class Sisyphus {
     }
 
     public static class DeadlineTask extends Task {
-        private String deadline;
+        private LocalDate deadline;
 
         public DeadlineTask(String name, String deadline) {
             super(name);
-            this.deadline = deadline;
+            try {
+                this.deadline = LocalDate.parse(deadline.substring(0, deadline.length() - 1));
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format: " + e.getMessage());
+            }
         }
 
         public String getDeadline() {
-            return this.deadline;
+            return this.deadline.toString();
         }
 
         public String toString() {
@@ -140,21 +146,26 @@ public class Sisyphus {
     }
 
     public static class EventTask extends Task {
-        private String start;
-        private String end;
+        private LocalDate start;
+        private LocalDate end;
 
         public EventTask(String name, String start, String end) {
             super(name);
-            this.start = start;
-            this.end = end;
+            try {
+                this.start = LocalDate.parse(start);
+                this.end = LocalDate.parse(end);
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format: " + e.getMessage());
+            }
+
         }
 
         public String getStart() {
-            return this.start;
+            return this.start.toString();
         }
 
         public String getEnd() {
-            return end;
+            return end.toString();
         }
 
         public String toString() {
@@ -176,8 +187,10 @@ public class Sisyphus {
                 ░▒▓███████▓▒░░▒▓█▓▒░▒▓███████▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓███████▓▒░
                   """;
         String welcomeMessage = "Hello, I am Sisyphus, what can I do for you?";
+        String instructions = "Enter date in yyyy-mm-dd format";
         System.out.println(logo);
         System.out.println(welcomeMessage);
+        System.out.println(instructions);
         System.out.println(divider);
     }
 
