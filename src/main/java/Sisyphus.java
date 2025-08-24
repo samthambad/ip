@@ -35,8 +35,9 @@ public class Sisyphus {
             } catch (IOException e) {
                 System.out.println("Error saving file: "+ e.getMessage());
             }
+            System.out.println("Tasks saved.");
         }
-        public boolean readFile() {
+        public ArrayList<Task> readFile() {
             ArrayList<Task> todoList = new ArrayList<>();
             try (Scanner fileReader = new Scanner(new File(DATA_PATH))) {
                 while (fileReader.hasNextLine()) {
@@ -73,7 +74,7 @@ public class Sisyphus {
             } catch (Exception e) {
                 System.out.println("Error reading file: " + e.getMessage());
             }
-            return false;
+            return todoList;
         }
     }
 
@@ -181,8 +182,9 @@ public class Sisyphus {
     }
 
     public static void main(String[] args) {
+        DataManager dm = new DataManager();
+        ArrayList<Task> todoList = dm.readFile();
         introMessage();
-        ArrayList<Task> todoList = new ArrayList<>();
         String input = "";
         Scanner myObj = new Scanner(System.in);
         while (!input.equals("bye")) {
@@ -194,6 +196,14 @@ public class Sisyphus {
             boolean recordTask = true;
             switch (inputArr[0]) {
             case "bye":
+                if (!todoList.isEmpty()) {
+                    System.out.println("You have tasks pending, type y/n whether to save.");
+                    Scanner anotherScanner = new Scanner(System.in);
+                    boolean whetherSave = anotherScanner.nextLine().equals("y");
+                    if (whetherSave) {
+                        dm.saveFile(todoList);
+                    }
+                }
                 System.out.println("    See you!");
                 break;
             case "list":
