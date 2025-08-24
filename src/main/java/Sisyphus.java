@@ -130,7 +130,7 @@ public class Sisyphus {
         public DeadlineTask(String name, String deadline) {
             super(name);
             try {
-                this.deadline = LocalDate.parse(deadline.substring(0, deadline.length() - 1));
+                this.deadline = LocalDate.parse(deadline.trim());
             } catch (DateTimeParseException e) {
                 System.out.println("Invalid date format: " + e.getMessage());
             }
@@ -141,7 +141,7 @@ public class Sisyphus {
         }
 
         public String toString() {
-            return "[D] " + super.toString() + " ( by:" + this.deadline + ")";
+            return "[D] " + super.toString() + " ( by:" + this.deadline + " )";
         }
     }
 
@@ -152,8 +152,8 @@ public class Sisyphus {
         public EventTask(String name, String start, String end) {
             super(name);
             try {
-                this.start = LocalDate.parse(start);
-                this.end = LocalDate.parse(end);
+                this.start = LocalDate.parse(start.trim());
+                this.end = LocalDate.parse(end.trim());
             } catch (DateTimeParseException e) {
                 System.out.println("Invalid date format: " + e.getMessage());
             }
@@ -169,7 +169,7 @@ public class Sisyphus {
         }
 
         public String toString() {
-            return "[E] " + super.toString() + " ( from: " + this.start + " to: " + this.end + ")";
+            return "[E] " + super.toString() + " ( from: " + this.start + " to: " + this.end + " )";
         }
 
     }
