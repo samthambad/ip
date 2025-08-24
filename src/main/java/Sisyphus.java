@@ -1,3 +1,4 @@
+import java.time.DateTimeException;
 import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class Sisyphus {
                         todoList.add(task);
                     }
                 }
-                System.out.println("Tasks loaded.");
+                System.out.println(todoList.size() + " tasks loaded.");
             } catch (FileNotFoundException e) {
                 System.out.println("No file found, starting fresh!");
             } catch (Exception e) {
@@ -152,10 +153,14 @@ public class Sisyphus {
         public EventTask(String name, String start, String end) {
             super(name);
             try {
+                if (!LocalDate.parse(start.trim()).isBefore(LocalDate.parse(end.trim()))) {
+                    throw new DateTimeException("Start is after end date!");
+                }
                 this.start = LocalDate.parse(start.trim());
                 this.end = LocalDate.parse(end.trim());
-            } catch (DateTimeParseException e) {
+            } catch (DateTimeException e) {
                 System.out.println("Invalid date format: " + e.getMessage());
+                throw e;
             }
 
         }
@@ -328,10 +333,14 @@ public class Sisyphus {
                     System.out.println("No to specified!");
                     break;
                 }
-                EventTask newEventTask = new EventTask(taskString, fromString, toString);
-                todoList.add(newEventTask);
-                System.out.println("    added: " + newEventTask);
-                System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                try {
+                    EventTask newEventTask = new EventTask(taskString, fromString, toString);
+                    todoList.add(newEventTask);
+                    System.out.println("    added: " + newEventTask);
+                    System.out.println("    You now have " + todoList.size() + " tasks in the list.");
+                } catch (DateTimeException e) {
+                    continue;
+                }
                 break;
             case "delete":
                 if (inputArr.length == 1) {
