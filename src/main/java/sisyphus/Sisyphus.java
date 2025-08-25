@@ -3,8 +3,18 @@ package sisyphus;
 import java.time.DateTimeException;
 import java.util.Scanner;
 
+/**
+ * Entry point and top-level types for the Sisyphus task management application.
+ */
 public class Sisyphus {
+    /**
+     * Handles console I/O lifecycle for the application.
+     */
     public static class Ui {
+        /**
+         * Initializes storage, loads tasks, prints the intro, and enters the REPL loop
+         * reading commands until the user enters "bye".
+         */
         public void init() {
             Storage storageManager = new Storage();
             TaskList todoList = storageManager.readFile();
@@ -17,11 +27,9 @@ public class Sisyphus {
                 String[] inputArr = input.split(" ");
                 System.out.println(divider);
 
-                String taskString = "";
-                boolean recordTask = true;
                 Parser p =  new Parser();
                 try {
-                    p.readAndRespond(inputArr, storageManager, todoList, taskString, recordTask);
+                    p.readAndRespond(inputArr, storageManager, todoList);
                 } catch (DateTimeException e) {
                     continue;
                 }
@@ -30,10 +38,20 @@ public class Sisyphus {
         }
     }
 
+    /**
+     * Parses user input and performs actions on storage and the in-memory task list.
+     */
     public static class Parser {
-
-        public void readAndRespond(String[] inputArr, Storage storageManager, TaskList todoList, String taskString, boolean recordTask) {
-
+        /**
+         * Reads user input
+         *
+         * @param inputArr input string seperated in init()
+         * @param storageManager Storage object initiated in init()
+         * @param todoList TaskList object initiated in init()
+         */
+        public void readAndRespond(String[] inputArr, Storage storageManager, TaskList todoList) {
+            boolean recordTask = true;
+            String taskString = "";
             switch (inputArr[0]) {
                 case "bye":
                     if (!todoList.isEmpty()) {
@@ -189,6 +207,9 @@ public class Sisyphus {
 
     static String divider = "-----------------------------";
 
+    /**
+     * Prints the application logo, welcome message, and usage instructions.
+     */
     public static void introMessage() {
         String logo = """
                 ░▒▓███████▓▒░▒▓█▓▒░░▒▓███████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓███████▓▒░
@@ -207,6 +228,11 @@ public class Sisyphus {
         System.out.println(divider);
     }
 
+    /**
+     * Application entry point. Launches the UI loop.
+     *
+     * @param args CLI arguments (unused)
+     */
     public static void main(String[] args) {
         Ui ui = new Ui();
         ui.init();

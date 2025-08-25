@@ -5,6 +5,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Represents a task with a deadline at a specific date-time.
+ * Supports inputs in "yyyy-MM-dd HH:mm" or date-only "yyyy-MM-dd" (treated as 00:00) formats.
+ */
 public class DeadlineTask extends Task {
     private LocalDateTime deadline;
 
@@ -12,6 +16,13 @@ public class DeadlineTask extends Task {
     private static final DateTimeFormatter INPUT_DATE_ONLY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
 
+    /**
+     * Creates a deadline task with the given name and deadline string.
+     *
+     * @param name            the task description
+     * @param deadlineString  the deadline date-time string
+     * @throws DateTimeParseException if the deadline string is not in an accepted format
+     */
     public DeadlineTask(String name, String deadlineString) throws DateTimeParseException {
         super(name);
         // Parse the input date string (yyyy-MM-dd format)
@@ -33,14 +44,29 @@ public class DeadlineTask extends Task {
         }
     }
 
+    /**
+     * Returns the parsed deadline.
+     *
+     * @return deadline as LocalDateTime
+     */
     public LocalDateTime getDeadline() {
         return this.deadline;
     }
 
+    /**
+     * Returns the deadline in the canonical input format yyyy-MM-dd HH:mm.
+     *
+     * @return formatted deadline string
+     */
     public String getDeadlineString() {
         return this.deadline.format(INPUT_FORMAT);
     }
 
+    /**
+     * Returns a formatted display string including the deadline.
+     *
+     * @return the display string for this deadline task
+     */
     public String toString() {
         // Format date for display (MMM dd yyyy format)
         String formattedDate = this.deadline.format(OUTPUT_FORMAT);
