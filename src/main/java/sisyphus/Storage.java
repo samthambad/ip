@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
-    private final String DATA_PATH = "data.txt";
 
-    public void saveFile(ArrayList<Task> listToSave) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(DATA_PATH))) {
+    public void saveFile(ArrayList<Task> listToSave, String path) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(path))) {
             for (Task t : listToSave) {
                 String taskName = t.getName();
                 int isDone = t.isDone() ? 1 : 0;
@@ -33,9 +32,9 @@ public class Storage {
         }
         System.out.println("Tasks saved.");
     }
-    public ArrayList<Task> readFile() {
+    public ArrayList<Task> readFile(String path) {
         ArrayList<Task> todoList = new ArrayList<>();
-        try (Scanner fileReader = new Scanner(new File(DATA_PATH))) {
+        try (Scanner fileReader = new Scanner(new File(path))) {
             while (fileReader.hasNextLine()) {
                 String line = fileReader.nextLine();
                 String[] parts = line.split(" \\| ");
