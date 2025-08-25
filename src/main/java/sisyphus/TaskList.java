@@ -61,7 +61,7 @@ public class TaskList {
      * @return the task at the index
      */
     public Task get(int index) {
-        return tasks.get(index);
+        return tasks.get(index - 1);
     }
 
     /**

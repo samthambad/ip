@@ -73,7 +73,7 @@ public class Sisyphus {
                 case "mark":
                     if (!inputArr[1].isEmpty() && Integer.parseInt(inputArr[1]) <= todoList.size()) {
                         int number = Integer.parseInt(inputArr[1]);
-                        todoList.get(number - 1).complete();
+                        todoList.get(number).complete();
                         System.out.println("Okay, task " + number + " is done");
                         for (int i = 0; i < todoList.size(); i++) {
                             int listIdx = i + 1;
@@ -86,7 +86,7 @@ public class Sisyphus {
                 case "unmark":
                     if (!inputArr[1].isEmpty() && Integer.parseInt(inputArr[1]) <= todoList.size()) {
                         int number = Integer.parseInt(inputArr[1]);
-                        todoList.get(number - 1).incomplete();
+                        todoList.get(number).incomplete();
                         System.out.println("Okay, task " + number + " is not done yet");
                         for (int i = 0; i < todoList.size(); i++) {
                             int listIdx = i + 1;
@@ -194,7 +194,7 @@ public class Sisyphus {
                         System.out.println("The task to delete does not exist!");
                         break;
                     }
-                    System.out.println("I have removed this task: " + todoList.get(taskToDelete - 1));
+                    System.out.println("I have removed this task: " + todoList.get(taskToDelete));
                     todoList.removeTask(taskToDelete);
                     System.out.println("You now have " + todoList.size() + " tasks in the list.");
                     break;
