@@ -55,9 +55,9 @@ public class TaskList {
     }
 
     /**
-     * Returns the task at the given 0-based index.
+     * Returns the task at the given 1-based index.
      *
-     * @param index 0-based index
+     * @param index 1-based index
      * @return the task at the index
      */
     public Task get(int index) {
