@@ -7,9 +7,9 @@ import java.util.Scanner;
 public class Storage {
     private final String DATA_PATH = "data.txt";
 
-    public void saveFile(ArrayList<Task> listToSave) {
+    public void saveFile(TaskList listToSave) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(DATA_PATH))) {
-            for (Task t : listToSave) {
+            for (Task t : listToSave.getTasks()) {
                 String taskName = t.getName();
                 int isDone = t.isDone() ? 1 : 0;
 
@@ -33,7 +33,7 @@ public class Storage {
         }
         System.out.println("Tasks saved.");
     }
-    public ArrayList<Task> readFile() {
+    public TaskList readFile() {
         ArrayList<Task> todoList = new ArrayList<>();
         try (Scanner fileReader = new Scanner(new File(DATA_PATH))) {
             while (fileReader.hasNextLine()) {
@@ -70,6 +70,6 @@ public class Storage {
         } catch (Exception e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
-        return todoList;
+        return new TaskList(todoList);
     }
 }

@@ -7,7 +7,7 @@ public class Sisyphus {
     public static class Ui {
         public void init() {
             Storage storageManager = new Storage();
-            TaskList todoList = new TaskList(storageManager.readFile());
+            TaskList todoList = storageManager.readFile();
 
             introMessage();
             String input = "";
