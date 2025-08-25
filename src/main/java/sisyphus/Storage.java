@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
-    private final String DATA_PATH = "../../../data.txt";
+    private final String DATA_PATH = "data.txt";
 
     public void saveFile(ArrayList<Task> listToSave) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(DATA_PATH))) {
@@ -15,17 +15,17 @@ public class Storage {
 
                 String taskType = t.getClass().getSimpleName();
                 switch (taskType) {
-                    case "TodoTask":
-                        writer.println("T | " + isDone + " | " + taskName);
-                        break;
-                    case "DeadlineTask":
-                        DeadlineTask dt = (DeadlineTask) t;
-                        writer.println("D | " + isDone + " | " + taskName + " | " + dt.getDeadlineString());
-                        break;
-                    case "EventTask":
-                        EventTask et = (EventTask) t;
-                        writer.println("E | " + isDone + " | " + taskName + " | " + et.getStartString() + " | " + et.getEndString());
-                        break;
+                case "TodoTask":
+                    writer.println("T | " + isDone + " | " + taskName);
+                    break;
+                case "DeadlineTask":
+                    DeadlineTask dt = (DeadlineTask) t;
+                    writer.println("D | " + isDone + " | " + taskName + " | " + dt.getDeadlineString());
+                    break;
+                case "EventTask":
+                    EventTask et = (EventTask) t;
+                    writer.println("E | " + isDone + " | " + taskName + " | " + et.getStartString() + " | " + et.getEndString());
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -47,15 +47,15 @@ public class Storage {
                 String taskName = parts[2];
                 Task task = null;
                 switch (taskType) {
-                    case "T":
-                        task = new TodoTask(taskName);
-                        break;
-                    case "D":
-                        task = new DeadlineTask(taskName, parts[3]);
-                        break;
-                    case "E":
-                        task = new EventTask(taskName, parts[3], parts[4]);
-                        break;
+                case "T":
+                    task = new TodoTask(taskName);
+                    break;
+                case "D":
+                    task = new DeadlineTask(taskName, parts[3]);
+                    break;
+                case "E":
+                    task = new EventTask(taskName, parts[3], parts[4]);
+                    break;
                 }
                 if (task != null) {
                     if (isDone) {
