@@ -23,8 +23,8 @@ public class TaskListTest {
 
         assertFalse(list.isEmpty());
         assertEquals(1, list.size());
-        assertSame(t1, list.get(0));
-        assertEquals("[T] [ ] read book", list.get(0).toString());
+        assertSame(t1, list.get(1));
+        assertEquals("[T] [ ] read book", list.get(1).toString());
     }
 
     @Test
@@ -38,13 +38,13 @@ public class TaskListTest {
         // remove first (1-based)
         list.removeTask(1);
         assertEquals(2, list.size());
-        assertEquals("[T] [ ] task b", list.get(0).toString());
-        assertEquals("[T] [ ] task c", list.get(1).toString());
+        assertEquals("[T] [ ] task b", list.get(1).toString());
+        assertEquals("[T] [ ] task c", list.get(2).toString());
 
         // remove last (1-based relative to current size)
         list.removeTask(2);
         assertEquals(1, list.size());
-        assertEquals("[T] [ ] task b", list.get(0).toString());
+        assertEquals("[T] [ ] task b", list.get(1).toString());
     }
 
     @Test
