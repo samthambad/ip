@@ -8,6 +8,12 @@ public class Storage {
     private final String DATA_PATH = "data.txt";
 
     public void saveFile(ArrayList<Task> listToSave) {
+    /**
+     * Saves todolist to data.txt in the DATA_PATH specified
+     *
+     * @param listToSave todoList
+     * @see data.txt
+     */
         try (PrintWriter writer = new PrintWriter(new FileWriter(DATA_PATH))) {
             for (Task t : listToSave) {
                 String taskName = t.getName();
@@ -34,6 +40,12 @@ public class Storage {
         System.out.println("Tasks saved.");
     }
     public ArrayList<Task> readFile() {
+
+    /**
+     * Takes data.txt from DATA_PATH and converts it to TaskList to be used
+     *
+     * @return todoList
+     */
         ArrayList<Task> todoList = new ArrayList<>();
         try (Scanner fileReader = new Scanner(new File(DATA_PATH))) {
             while (fileReader.hasNextLine()) {
