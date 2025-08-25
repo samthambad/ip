@@ -26,7 +26,7 @@ public class TaskList {
     }
 
     public Task get(int index) {
-        return tasks.get(index);
+        return tasks.get(index - 1);
     }
 
     public ArrayList<Task> getTasks() {
