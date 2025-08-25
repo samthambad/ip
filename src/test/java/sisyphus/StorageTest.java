@@ -1,13 +1,11 @@
 package sisyphus;
 
-import sisyphus.EventTask;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class StorageTest {
     @Test
@@ -20,7 +18,7 @@ public class StorageTest {
         Storage storage = new Storage();
         storage.saveFile(tasks, DATA_PATH);
         // read from the data.txt file
-        ArrayList<Task> readTasks = storage.readFile(DATA_PATH);
+        ArrayList<Task> readTasks = storage.readFile(DATA_PATH).getTasks();
         // compare the two ArrayLists
         assertEquals(tasks.size(), readTasks.size());
         for (int i = 0; i < tasks.size(); i++) {
