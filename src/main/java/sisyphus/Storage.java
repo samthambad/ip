@@ -9,17 +9,10 @@ import java.util.Scanner;
  * The file format stores task type, completion flag, and task-specific fields separated by " | ".
  */
 public class Storage {
-    private final String DATA_PATH = "data.txt";
 
-    /**
-     * Saves todolist to data.txt in the DATA_PATH specified
-     *
-     * @param listToSave todoList
-     * @see data.txt
-     */
-    public void saveFile(TaskList listToSave) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(DATA_PATH))) {
-            for (Task t : listToSave.getTasks()) {
+    public void saveFile(ArrayList<Task> listToSave, String path) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(path))) {
+            for (Task t : listToSave) {
                 String taskName = t.getName();
                 int isDone = t.isDone() ? 1 : 0;
 
@@ -49,9 +42,9 @@ public class Storage {
      *
      * @return todoList
      */
-    public TaskList readFile() {
+    public TaskList readFile(String path) {
         ArrayList<Task> todoList = new ArrayList<>();
-        try (Scanner fileReader = new Scanner(new File(DATA_PATH))) {
+        try (Scanner fileReader = new Scanner(new File(path))) {
             while (fileReader.hasNextLine()) {
                 String line = fileReader.nextLine();
                 String[] parts = line.split(" \\| ");
