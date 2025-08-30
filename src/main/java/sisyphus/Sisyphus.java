@@ -7,10 +7,12 @@ import java.util.Scanner;
  * Entry point and top-level types for the Sisyphus task management application.
  */
 public class Sisyphus {
+    public static final String DATA_PATH = "data.txt";
+
+
     /**
      * Handles console I/O lifecycle for the application.
      */
-    public static final String DATA_PATH = "data.txt";
     public static class Ui {
         /**
          * Initializes storage, loads tasks, prints the intro, and enters the REPL loop
@@ -28,7 +30,7 @@ public class Sisyphus {
                 String[] inputArr = input.split(" ");
                 System.out.println(divider);
 
-                Parser p =  new Parser();
+                Parser p = new Parser();
                 try {
                     p.readAndRespond(inputArr, storageManager, todoList);
                 } catch (DateTimeException e) {
@@ -38,11 +40,16 @@ public class Sisyphus {
             }
         }
 
+        /**
+         * Prints all tasks in the given list to standard output, one per line, or a message
+         * when the list is empty.
+         *
+         * @param todoList the list of tasks to display
+         */
         public static void printTasks(TaskList todoList) {
             if (todoList.isEmpty()) {
                 System.out.println("No tasks found");
-            }
-            else {
+            } else {
                 for (int i = 1; i <= todoList.size(); i++) {
                     System.out.println("    " + i + "." + todoList.get(i));
                 }
@@ -55,11 +62,12 @@ public class Sisyphus {
      */
     public static class Parser {
         /**
-         * Reads user input
+         * Parses a tokenized user command and updates storage and the task list accordingly.
+         * Supported commands: bye, list, find, mark, unmark, todo, deadline, event, delete.
          *
-         * @param inputArr input string seperated in init()
-         * @param storageManager Storage object initiated in init()
-         * @param todoList TaskList object initiated in init()
+         * @param inputArr        the tokenized input (split by spaces)
+         * @param storageManager  the storage instance used for persistence on exit
+         * @param todoList        the task list to operate on
          */
         public void readAndRespond(String[] inputArr, Storage storageManager, TaskList todoList) {
             boolean recordTask = true;
@@ -118,8 +126,9 @@ public class Sisyphus {
                     break;
                 }
                 for (int i = 0; i < inputArr.length; i++) {
-                    if (i == 0)
+                    if (i == 0) {
                         continue;
+                    }
                     taskString += inputArr[i] + " ";
                 }
                 TodoTask newTodoTask = new TodoTask(taskString);
@@ -134,9 +143,9 @@ public class Sisyphus {
                 }
                 String deadlineString = "";
                 for (int i = 0; i < inputArr.length; i++) {
-                    if (i == 0)
+                    if (i == 0) {
                         continue;
-                    else if (inputArr[i].equals("/by")) {
+                    } else if (inputArr[i].equals("/by")) {
                         recordTask = false;
                         continue;
                     }
@@ -164,9 +173,9 @@ public class Sisyphus {
                 String fromString = "";
                 String toString = "";
                 for (int i = 0; i < inputArr.length; i++) {
-                    if (i == 0)
+                    if (i == 0) {
                         continue;
-                    else if (inputArr[i].equals("/from")) {
+                    } else if (inputArr[i].equals("/from")) {
                         recordTask = false;
                         continue;
                     } else if (inputArr[i].equals("/to")) {
@@ -221,7 +230,7 @@ public class Sisyphus {
         }
     }
 
-    static String divider = "-----------------------------";
+    private static final String divider = "-----------------------------";
 
     /**
      * Prints the application logo, welcome message, and usage instructions.

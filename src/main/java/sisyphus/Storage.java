@@ -1,6 +1,10 @@
 package sisyphus;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,7 +13,12 @@ import java.util.Scanner;
  * The file format stores task type, completion flag, and task-specific fields separated by " | ".
  */
 public class Storage {
-
+    /**
+     * Saves the list of tasks to the specified file.
+     *
+     * @param listToSave The list of tasks to be saved.
+     * @param path       The file path where the tasks will be saved.
+     */
     public void saveFile(ArrayList<Task> listToSave, String path) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(path))) {
             for (Task t : listToSave) {
@@ -27,12 +36,15 @@ public class Storage {
                     break;
                 case "EventTask":
                     EventTask et = (EventTask) t;
-                    writer.println("E | " + isDone + " | " + taskName + " | " + et.getStartString() + " | " + et.getEndString());
+                    writer.println("E | " + isDone + " | " + taskName + " | "
+                            + et.getStartString() + " | " + et.getEndString());
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + taskType);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error saving file: "+ e.getMessage());
+            System.out.println("Error saving file: " + e.getMessage());
         }
         System.out.println("Tasks saved.");
     }
@@ -54,7 +66,7 @@ public class Storage {
                 String taskType = parts[0];
                 boolean isDone = parts[1].equals("1");
                 String taskName = parts[2];
-                Task task = null;
+                Task task;
                 switch (taskType) {
                 case "T":
                     task = new TodoTask(taskName);
@@ -65,6 +77,8 @@ public class Storage {
                 case "E":
                     task = new EventTask(taskName, parts[3], parts[4]);
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + taskType);
                 }
                 if (task != null) {
                     if (isDone) {

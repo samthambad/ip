@@ -10,12 +10,12 @@ import java.time.format.DateTimeParseException;
  * Accepts input in "yyyy-MM-dd HH:mm" or date-only "yyyy-MM-dd" (treated as 00:00) formats.
  */
 public class EventTask extends Task {
-    private LocalDateTime start;
-    private LocalDateTime end;
 
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static final DateTimeFormatter INPUT_DATE_ONLY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+    private LocalDateTime start;
+    private LocalDateTime end;
 
     /**
      * Creates a new event task with a name, start, and end date-times.
@@ -41,7 +41,8 @@ public class EventTask extends Task {
                 LocalDate date = LocalDate.parse(dateTimeString, INPUT_DATE_ONLY);
                 return date.atStartOfDay();
             } catch (DateTimeParseException e2) {
-                throw new DateTimeParseException("Invalid date format. Use yyyy-MM-dd or yyyy-MM-dd HH:mm", dateTimeString, 0);
+                throw new DateTimeParseException("Invalid date format. Use yyyy-MM-dd or yyyy-MM-dd HH:mm",
+                        dateTimeString, 0);
             }
         }
     }
