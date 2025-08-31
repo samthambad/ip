@@ -254,6 +254,13 @@ public class Sisyphus {
     }
 
     /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        return "Sisyphus heard: " + input;
+    }
+
+    /**
      * Application entry point. Launches the UI loop.
      *
      * @param args CLI arguments (unused)

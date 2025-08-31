@@ -9,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import sisyphus.Sisyphus;
 
 /**
  * Minimal JavaFX GUI
@@ -22,6 +23,7 @@ public class Gui extends Application {
     private Scene scene;
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private Sisyphus sisyphus = new Sisyphus();
 
     /**
      * Starts the JavaFX application
@@ -39,8 +41,17 @@ public class Gui extends Application {
         userInput = new TextField();
         sendButton = new Button("Send");
 
-        DialogBox dialogBox = new DialogBox("Hello!", userImage);
-        dialogContainer.getChildren().addAll(dialogBox);
+        //Handling user input
+
+        sendButton.setOnMouseClicked((event) -> {
+            handleUserInput();
+        });
+        userInput.setOnAction((event) -> {
+            handleUserInput();
+        });
+
+        //Scroll down to the end every time dialogContainer's height changes.
+        dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
 
         AnchorPane mainLayout = new AnchorPane();
         stage.setTitle("Duke");
@@ -79,4 +90,20 @@ public class Gui extends Application {
 
         //More code to be added here later
     }
+
+    /**
+     * Creates a dialog box containing user input, and appends it to
+     * the dialog container. Clears the user input after processing.
+     */
+    private void handleUserInput() {
+        String userText = userInput.getText();
+        String sisyphusText = sisyphus.getResponse(userInput.getText());
+        dialogContainer.getChildren().addAll(
+                DialogBox.getUserDialog(userText, userImage),
+                DialogBox.getSisyphusDialog(sisyphusText, dukeImage)
+        );
+        userInput.clear();
+    }
+
+
 }
