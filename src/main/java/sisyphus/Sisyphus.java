@@ -1,6 +1,5 @@
 package sisyphus;
 
-
 /**
  * Entry point and top-level types for the Sisyphus task management application.
  */
@@ -36,14 +35,11 @@ public class Sisyphus {
     public static class Ui {
         static final String divider = "-----------------------------\n";
 
-        public Ui() {
-            introMessage();
-        }
-
         /**
          * Prints the application logo, welcome message, and usage instructions.
          */
-        public void introMessage() {
+        public String introMessage() {
+            StringBuilder initMessage = new StringBuilder();
             String logo = """
                 ░▒▓███████▓▒░▒▓█▓▒░░▒▓███████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓███████▓▒░
                 ░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░
@@ -55,10 +51,11 @@ public class Sisyphus {
                 """;
             String welcomeMessage = "Hello, I am Sisyphus, what can I do for you?";
             String instructions = "Enter date in yyyy-MM-dd format and date and time in yyyy-MM-dd HH:mm";
-            System.out.println(logo);
-            System.out.println(welcomeMessage);
-            System.out.println(instructions);
-            System.out.println(divider);
+            initMessage.append(logo).append("\n");
+            initMessage.append(welcomeMessage).append("\n");
+            initMessage.append(instructions).append("\n");
+            initMessage.append(divider);
+            return initMessage.toString();
         }
 
         /**
@@ -79,8 +76,6 @@ public class Sisyphus {
             return sb.toString();
         }
     }
-
-
 
     /**
      * Sisyphus output to GUI.

@@ -40,7 +40,7 @@ public class Parser {
                 int number = Integer.parseInt(inputArr[1]);
                 todoList.get(number).complete();
                 output.append("Okay, task ").append(number).append(" is done\n");
-                output.append(Sisyphus.Ui.printTasks(SearchTask.filterTasks(todoList, inputArr[1])));
+                output.append(Sisyphus.Ui.printTasks(todoList));
             } else {
                 output.append("Task ").append(inputArr[1]).append(" does not exist");
             }
@@ -50,7 +50,7 @@ public class Parser {
                 int number = Integer.parseInt(inputArr[1]);
                 todoList.get(number).incomplete();
                 output.append("Okay, task ").append(number).append(" is not done yet\n");
-                output.append(Sisyphus.Ui.printTasks(SearchTask.filterTasks(todoList, inputArr[1])));
+                output.append(Sisyphus.Ui.printTasks(todoList));
             } else {
                 output.append("Task ").append(inputArr[1]).append(" does not exist");
             }
@@ -90,6 +90,7 @@ public class Parser {
                     deadlineString += inputArr[i] + " ";
                 }
             }
+            System.out.println("deadline string: " + deadlineString);
             if (deadlineString.isEmpty()) {
                 output.append("No deadline specified!\n");
                 return output.toString();
