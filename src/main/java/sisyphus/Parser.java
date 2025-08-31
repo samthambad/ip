@@ -24,10 +24,10 @@ public class Parser {
             }
             output.append("    See you!");
             return output.toString();
-        break;
+            break;
         case "list":
             return Sisyphus.Ui.printTasks(todoList);
-        break;
+            break;
         case "find":
             if (inputArr.length < 2 || inputArr.length > 3) {
                 System.out.println("Invalid input");
