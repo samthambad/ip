@@ -7,6 +7,7 @@ import java.util.Scanner;
  * Entry point and top-level types for the Sisyphus task management application.
  */
 public class Sisyphus {
+    private static boolean isInitialized = false;
     public static final String DATA_PATH = "data.txt";
 
 
@@ -19,10 +20,6 @@ public class Sisyphus {
          * reading commands until the user enters "bye".
          */
         public String init(String input) {
-            Storage storageManager = new Storage();
-            TaskList todoList = storageManager.readFile(DATA_PATH);
-
-            introMessage();
 
             while (!input.equals("bye")) {
                 String[] inputArr = input.split(" ");
@@ -44,14 +41,16 @@ public class Sisyphus {
          *
          * @param todoList the list of tasks to display
          */
-        public static void printTasks(TaskList todoList) {
+        public static String printTasks(TaskList todoList) {
+            StringBuilder sb = new StringBuilder();
             if (todoList.isEmpty()) {
-                System.out.println("No tasks found");
+                return "No tasks found";
             } else {
                 for (int i = 1; i <= todoList.size(); i++) {
-                    System.out.println("    " + i + "." + todoList.get(i));
+                    sb.append("    ").append(i).append(".").append(todoList.get(i)).append("\n");
                 }
             }
+            return sb.toString();
         }
     }
 
@@ -81,7 +80,7 @@ public class Sisyphus {
                 return output.toString();
                 break;
             case "list":
-                Ui.printTasks(todoList);
+                return Ui.printTasks(todoList);
                 break;
             case "find":
                 if (inputArr.length < 2 || inputArr.length > 3) {
@@ -254,7 +253,16 @@ public class Sisyphus {
      */
     public String getResponse(String input) {
         // generate a response
-
+        Ui ui = null;
+        if (!isInitialized) {
+            Storage storageManager = new Storage();
+            TaskList todoList = storageManager.readFile(DATA_PATH);
+            introMessage();
+            ui = new Ui();
+            isInitialized = true;
+        }
+        assert ui != null;
+        ui.init(input);
         return input;
     }
 
@@ -265,7 +273,5 @@ public class Sisyphus {
      * @param args CLI arguments (unused)
      */
     public static void main(String[] args) {
-        Ui ui = new Ui();
-        ui.init();
     }
 }
