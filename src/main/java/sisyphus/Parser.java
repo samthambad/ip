@@ -24,47 +24,41 @@ public class Parser {
             }
             output.append("    See you!");
             return output.toString();
-            break;
         case "list":
             return Sisyphus.Ui.printTasks(todoList);
-            break;
         case "find":
             if (inputArr.length < 2 || inputArr.length > 3) {
-                System.out.println("Invalid input");
+                output.append("Invalid input");
                 break;
             }
-            System.out.println("Filtering based on query: " + inputArr[1]);
-            System.out.println(Sisyphus.divider);
-            Sisyphus.Ui.printTasks(SearchTask.filterTasks(todoList, inputArr[1]));
-            break;
+            output.append("Filtering based on query: ").append(inputArr[1]).append("\n");
+            output.append(Sisyphus.Ui.divider);
+            output.append(Sisyphus.Ui.printTasks(SearchTask.filterTasks(todoList, inputArr[1])));
+            return output.toString();
         case "mark":
             if (!inputArr[1].isEmpty() && Integer.parseInt(inputArr[1]) <= todoList.size()) {
                 int number = Integer.parseInt(inputArr[1]);
                 todoList.get(number).complete();
-                System.out.println("Okay, task " + number + " is done");
-                for (int i = 1; i <= todoList.size(); i++) {
-                    System.out.println("    " + i + "." + todoList.get(i));
-                }
+                output.append("Okay, task ").append(number).append(" is done\n");
+                output.append(Sisyphus.Ui.printTasks(SearchTask.filterTasks(todoList, inputArr[1])));
             } else {
-                System.out.println("Task " + inputArr[1] + " does not exist");
+                output.append("Task ").append(inputArr[1]).append(" does not exist");
             }
-            break;
+            return output.toString();
         case "unmark":
             if (!inputArr[1].isEmpty() && Integer.parseInt(inputArr[1]) <= todoList.size()) {
                 int number = Integer.parseInt(inputArr[1]);
                 todoList.get(number).incomplete();
-                System.out.println("Okay, task " + number + " is not done yet");
-                for (int i = 1; i <= todoList.size(); i++) {
-                    System.out.println("    " + i + "." + todoList.get(i));
-                }
+                output.append("Okay, task ").append(number).append(" is not done yet\n");
+                output.append(Sisyphus.Ui.printTasks(SearchTask.filterTasks(todoList, inputArr[1])));
             } else {
-                System.out.println("Task " + inputArr[1] + " does not exist");
+                output.append("Task ").append(inputArr[1]).append(" does not exist");
             }
-            break;
+            return output.toString();
         case "todo":
             if (inputArr.length == 1) {
-                System.out.println("The description of a todo cannot be empty!");
-                break;
+                output.append("The description of a todo cannot be empty!\n");
+                return output.toString();
             }
             for (int i = 0; i < inputArr.length; i++) {
                 if (i == 0) {
@@ -74,13 +68,13 @@ public class Parser {
             }
             TodoTask newTodoTask = new TodoTask(taskString);
             todoList.addTask(newTodoTask);
-            System.out.println("    added: " + newTodoTask);
-            System.out.println("    You now have " + todoList.size() + " tasks in the list.");
-            break;
+            output.append("    added: ").append(newTodoTask).append("\n");
+            output.append("    You now have ").append(todoList.size()).append(" tasks in the list.\n");
+            return output.toString();
         case "deadline":
             if (inputArr.length == 1) {
-                System.out.println("The description of a deadline task cannot be empty!");
-                break;
+                output.append("The description of a deadline task cannot be empty!\n");
+                return output.toString();
             }
             String deadlineString = "";
             for (int i = 0; i < inputArr.length; i++) {
@@ -96,19 +90,19 @@ public class Parser {
                     deadlineString += inputArr[i] + " ";
                 }
             }
-            if (deadlineString.length() == 0) {
-                System.out.println("No deadline specified!");
-                break;
+            if (deadlineString.isEmpty()) {
+                output.append("No deadline specified!\n");
+                return output.toString();
             }
             DeadlineTask newDeadlineTask = new DeadlineTask(taskString, deadlineString);
             todoList.addTask(newDeadlineTask);
-            System.out.println("    added: " + newDeadlineTask);
-            System.out.println("    You now have " + todoList.size() + " tasks in the list.");
-            break;
+            output.append("    added: ").append(newDeadlineTask).append("\n");
+            output.append("    You now have ").append(todoList.size()).append(" tasks in the list.\n");
+            return output.toString();
         case "event":
             if (inputArr.length == 1) {
-                System.out.println("The description of a event task cannot be empty!");
-                break;
+                output.append("The description of a event task cannot be empty!");
+                return output.toString();
             }
             boolean recordFrom = true;
             String fromString = "";
@@ -132,41 +126,42 @@ public class Parser {
                 }
             }
             if (fromString.isEmpty()) {
-                System.out.println("No from specified!");
-                break;
+                output.append("No from specified!");
+                return output.toString();
             }
             if (toString.isEmpty()) {
-                System.out.println("No to specified!");
-                break;
+                output.append("No to specified!");
+                return output.toString();
             }
             EventTask newEventTask = new EventTask(taskString, fromString, toString);
             todoList.addTask(newEventTask);
-            System.out.println("    added: " + newEventTask);
-            System.out.println("    You now have " + todoList.size() + " tasks in the list.");
-            break;
+            output.append("    added: ").append(newEventTask).append("\n");
+            output.append("    You now have ").append(todoList.size()).append(" tasks in the list.\n");
+            return output.toString();
         case "delete":
             if (inputArr.length == 1) {
-                System.out.println("Task to delete has not been specified!");
-                break;
+                output.append("Task to delete has not been specified!\n");
+                return output.toString();
             } else if (inputArr.length > 2) {
-                System.out.println("Incorrect input!");
-                break;
+                output.append("Incorrect input!\n");
+                return output.toString();
             } else if (todoList.isEmpty()) {
-                System.out.println("There aren't any tasks to delete!");
-                break;
+                output.append("There aren't any tasks to delete!\n");
+                return output.toString();
             }
             int taskToDelete = Integer.parseInt(inputArr[1]);
             if (taskToDelete > todoList.size() || taskToDelete < 0) {
-                System.out.println("The task to delete does not exist!");
-                break;
+                output.append("The task to delete does not exist!\n");
+                return output.toString();
             }
-            System.out.println("I have removed this task: " + todoList.get(taskToDelete));
+            output.append("I have removed this task: ").append(todoList.get(taskToDelete));
             todoList.removeTask(taskToDelete);
-            System.out.println("You now have " + todoList.size() + " tasks in the list.");
-            break;
+            output.append("You now have ").append(todoList.size()).append(" tasks in the list.\n");
+            return output.toString();
         default:
-            System.out.println("    Invalid command, you are wrong.");
-            break;
+            output.append("    Invalid command, you are wrong.");
+            return output.toString();
         }
+        return output.toString();
     }
 }

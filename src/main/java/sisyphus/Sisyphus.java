@@ -6,7 +6,6 @@ package sisyphus;
  */
 public class Sisyphus {
     public static final String DATA_PATH = "data.txt";
-    private static final String divider = "-----------------------------";
     private Storage storageManager;
     private TaskList todoList;
     private Parser parser;
@@ -35,6 +34,7 @@ public class Sisyphus {
      * Handles console I/O lifecycle for the application.
      */
     public static class Ui {
+        static final String divider = "-----------------------------\n";
 
         public Ui() {
             introMessage();
@@ -87,7 +87,7 @@ public class Sisyphus {
      */
     public String getResponse(String input) {
         // generate a response
-        return input;
+        return this.enterInput(input);
     }
 
 
