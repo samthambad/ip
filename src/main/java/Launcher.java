@@ -10,6 +10,6 @@ public class Launcher {
      * @param args CLI arguments passed to the application
      */
     public static void main(String[] args) {
-        Application.launch(Gui.class, args);
+        Application.launch(Main.class, args);
     }
 }
