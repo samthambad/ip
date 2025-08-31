@@ -18,26 +18,24 @@ public class Sisyphus {
          * Initializes storage, loads tasks, prints the intro, and enters the REPL loop
          * reading commands until the user enters "bye".
          */
-        public void init() {
+        public String init(String input) {
             Storage storageManager = new Storage();
             TaskList todoList = storageManager.readFile(DATA_PATH);
 
             introMessage();
-            String input = "";
-            Scanner myObj = new Scanner(System.in);
+
             while (!input.equals("bye")) {
-                input = myObj.nextLine();
                 String[] inputArr = input.split(" ");
                 System.out.println(divider);
 
                 Parser p = new Parser();
                 try {
-                    p.readAndRespond(inputArr, storageManager, todoList);
+                    return p.readAndRespond(inputArr, storageManager, todoList);
                 } catch (DateTimeException e) {
                     continue;
                 }
-                System.out.println(divider);
             }
+            return null;
         }
 
         /**
@@ -69,20 +67,18 @@ public class Sisyphus {
          * @param storageManager  the storage instance used for persistence on exit
          * @param todoList        the task list to operate on
          */
-        public void readAndRespond(String[] inputArr, Storage storageManager, TaskList todoList) {
+        public String readAndRespond(String[] inputArr, Storage storageManager, TaskList todoList) {
+            StringBuilder output = new StringBuilder();
             boolean recordTask = true;
             String taskString = "";
             switch (inputArr[0]) {
             case "bye":
                 if (!todoList.isEmpty()) {
-                    System.out.println("You have tasks pending, type y/n whether to save.");
-                    Scanner anotherScanner = new Scanner(System.in);
-                    boolean whetherSave = anotherScanner.nextLine().equals("y");
-                    if (whetherSave) {
-                        storageManager.saveFile(todoList.getTasks(), DATA_PATH);
-                    }
+                    storageManager.saveFile(todoList.getTasks(), DATA_PATH);
+                    output.append("    Saved.\n");
                 }
-                System.out.println("    See you!");
+                output.append("    See you!");
+                return output.toString();
                 break;
             case "list":
                 Ui.printTasks(todoList);
@@ -254,11 +250,14 @@ public class Sisyphus {
     }
 
     /**
-     * Generates a response for the user's chat message.
+     * Sisyphus output to GUI.
      */
     public String getResponse(String input) {
-        return "Sisyphus heard: " + input;
+        // generate a response
+
+        return input;
     }
+
 
     /**
      * Application entry point. Launches the UI loop.
