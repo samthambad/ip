@@ -38,7 +38,7 @@ public class Sisyphus {
         /**
          * Prints the application logo, welcome message, and usage instructions.
          */
-        public String introMessage() {
+        public static String introMessage() {
             StringBuilder initMessage = new StringBuilder();
             String logo = """
                 ░▒▓███████▓▒░▒▓█▓▒░░▒▓███████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓███████▓▒░
@@ -50,9 +50,11 @@ public class Sisyphus {
                 ░▒▓███████▓▒░░▒▓█▓▒░▒▓███████▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓███████▓▒░
                 """;
             String welcomeMessage = "Hello, I am Sisyphus, what can I do for you?";
+            String manualInstructions = "type 'manual' to see a list of the commands";
             String instructions = "Enter date in yyyy-MM-dd format and date and time in yyyy-MM-dd HH:mm";
             initMessage.append(logo).append("\n");
             initMessage.append(welcomeMessage).append("\n");
+            initMessage.append(manualInstructions).append("\n");
             initMessage.append(instructions).append("\n");
             initMessage.append(divider);
             return initMessage.toString();

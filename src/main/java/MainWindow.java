@@ -28,6 +28,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.getChildren().add(DialogBox.getSisyphusDialog(Sisyphus.Ui.introMessage(), dukeImage));
     }
 
     /** Injects the Duke instance */

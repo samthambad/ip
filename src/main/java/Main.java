@@ -19,8 +19,10 @@ public class Main extends Application {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
-            Scene scene = new Scene(ap);
+            Scene scene = new Scene(ap, 1200, 800);
             stage.setScene(scene);
+            stage.setWidth(1200);
+            stage.setHeight(800);
             fxmlLoader.<MainWindow>getController().setSisyphus(sisyphus); // inject the Sisyphus instance
             stage.show();
         } catch (IOException e) {

@@ -17,10 +17,16 @@ public class Parser {
         boolean recordTask = true;
         String taskString = "";
         switch (inputArr[0]) {
+        case "manual":
+            output.append("todo <task> for a simple todo\n");
+            output.append("deadline <task> /by <time> for a time that ends by a certain time\n");
+            output.append("event <task> /from <time> /to <time> for a time that ends by a certain time\n");
+            output.append("list to show all tasks");
+            return output.toString();
         case "bye":
             if (!todoList.isEmpty()) {
                 storageManager.saveFile(todoList.getTasks(), Sisyphus.DATA_PATH);
-                output.append("    Saved.\n");
+                output.append("Saved.\n");
             }
             output.append("    See you!");
             return output.toString();
@@ -68,8 +74,8 @@ public class Parser {
             }
             TodoTask newTodoTask = new TodoTask(taskString);
             todoList.addTask(newTodoTask);
-            output.append("    added: ").append(newTodoTask).append("\n");
-            output.append("    You now have ").append(todoList.size()).append(" tasks in the list.\n");
+            output.append("added: ").append(newTodoTask).append("\n");
+            output.append("You now have ").append(todoList.size()).append(" tasks in the list.\n");
             return output.toString();
         case "deadline":
             if (inputArr.length == 1) {
@@ -97,8 +103,8 @@ public class Parser {
             }
             DeadlineTask newDeadlineTask = new DeadlineTask(taskString, deadlineString);
             todoList.addTask(newDeadlineTask);
-            output.append("    added: ").append(newDeadlineTask).append("\n");
-            output.append("    You now have ").append(todoList.size()).append(" tasks in the list.\n");
+            output.append("added: ").append(newDeadlineTask).append("\n");
+            output.append("You now have ").append(todoList.size()).append(" tasks in the list.\n");
             return output.toString();
         case "event":
             if (inputArr.length == 1) {
@@ -160,7 +166,7 @@ public class Parser {
             output.append("You now have ").append(todoList.size()).append(" tasks in the list.\n");
             return output.toString();
         default:
-            output.append("    Invalid command, you are wrong.");
+            output.append("Invalid command, you are wrong.");
             return output.toString();
         }
         return output.toString();
