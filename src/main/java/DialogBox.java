@@ -53,6 +53,15 @@ public class DialogBox extends HBox {
     public static DialogBox getSisyphusDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
+
+        // Normalize tabs, use monospaced font, and disable wrapping for ASCII art
+        String mono = text.replace("\t", "    ");
+        db.dialog.setText(mono);
+        db.dialog.setWrapText(false);
+        db.dialog.setStyle(
+                "-fx-font-family: 'Menlo','Monaco','Consolas','Courier New',monospace; -fx-font-size: 12px;"
+        );
+
         return db;
     }
 }
