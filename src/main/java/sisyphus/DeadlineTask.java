@@ -27,6 +27,7 @@ public class DeadlineTask extends Task {
         super(name);
         // Parse the input date string (yyyy-MM-dd format)
         this.deadline = parseDateTime(deadlineString.trim());
+        assert this.deadline != null : "Deadline must not be null";
     }
 
     private LocalDateTime parseDateTime(String dateTimeString) throws DateTimeParseException {
@@ -51,6 +52,7 @@ public class DeadlineTask extends Task {
      * @return deadline as LocalDateTime
      */
     public LocalDateTime getDeadline() {
+        assert this.deadline != null : "Deadline should have been initialized";
         return this.deadline;
     }
 
