@@ -1,5 +1,9 @@
 package sisyphus;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 /**
  * Entry point and top-level types for the Sisyphus task management application.
  */
@@ -70,12 +74,41 @@ public class Sisyphus {
             StringBuilder sb = new StringBuilder();
             if (todoList.isEmpty()) {
                 return "No tasks found";
-            } else {
-                for (int i = 1; i <= todoList.size(); i++) {
-                    sb.append("    ").append(i).append(".").append(todoList.get(i)).append("\n");
-                }
+            }
+            for (int i = 1; i <= todoList.size(); i++) {
+                sb.append("    ").append(i).append(".").append(todoList.get(i)).append("\n");
             }
             return sb.toString();
+        }
+
+        /**
+         * Print the tasks with the earliest DeadlineTask or earliest from time for the EventTask
+         * @param todoList the list of tasks to display
+         *
+         */
+        public static String printTasksByLatestFirst(TaskList todoList) {
+            StringBuilder sb = new StringBuilder();
+            if (todoList.isEmpty()) {
+                return "No tasks found";
+            }
+            // Use Java streams to sort the tasks by time
+            ArrayList<Task> sortedTaskArrayList = todoList.getTasks().stream().sorted((t1, t2) -> {
+                LocalDateTime t1Time = (t1 instanceof DeadlineTask) ? ((DeadlineTask) t1).getDeadline()
+                        : (t1 instanceof EventTask) ? ((EventTask) t1).getStart() : null;
+
+                LocalDateTime t2Time = (t2 instanceof DeadlineTask) ? ((DeadlineTask) t2).getDeadline()
+                        : (t2 instanceof EventTask) ? ((EventTask) t2).getStart() : null;
+                if (t1Time == null && t2Time == null) {
+                    return 0;
+                } else if (t1Time == null) {
+                    return 1; // t1 (plain Task) goes to end
+                } else if (t2Time == null) {
+                    return -1; // t2 (plain Task) goes to end
+                }
+                return t1Time.compareTo(t2Time);
+            }).collect(Collectors.toCollection(ArrayList::new));
+            TaskList sortedTaskList = new TaskList(sortedTaskArrayList);
+            return printTasks(sortedTaskList);
         }
     }
 
