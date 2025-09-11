@@ -8,6 +8,7 @@ public class Parser {
     private static final String CMD_MANUAL = "manual";
     private static final String CMD_BYE = "bye";
     private static final String CMD_LIST = "list";
+    private static final String CMD_SORTED = "latest";
     private static final String CMD_FIND = "find";
     private static final String CMD_MARK = "mark";
     private static final String CMD_UNMARK = "unmark";
@@ -45,27 +46,30 @@ public class Parser {
             return MSG_INVALID;
         }
         String command = tokens[0];
-        switch (command) {
-        case CMD_MANUAL:   return handleManual();
-        case CMD_BYE:      return handleBye(storageManager, todoList);
-        case CMD_LIST:     return Sisyphus.Ui.printTasks(todoList);
-        case CMD_FIND:     return handleFind(tokens, todoList);
-        case CMD_MARK:     return handleMark(tokens, todoList, true);
-        case CMD_UNMARK:   return handleMark(tokens, todoList, false);
-        case CMD_TODO:     return handleTodo(tokens, todoList);
-        case CMD_DEADLINE: return handleDeadline(tokens, todoList);
-        case CMD_EVENT:    return handleEvent(tokens, todoList);
-        case CMD_DELETE:   return handleDelete(tokens, todoList);
-        default:           return MSG_INVALID;
-        }
+        return switch (command) {
+        case CMD_MANUAL -> handleManual();
+        case CMD_BYE -> handleBye(storageManager, todoList);
+        case CMD_LIST -> Sisyphus.Ui.printTasks(todoList);
+        case CMD_SORTED -> Sisyphus.Ui.printTasksByLatestFirst(todoList);
+        case CMD_FIND -> handleFind(tokens, todoList);
+        case CMD_MARK -> handleMark(tokens, todoList, true);
+        case CMD_UNMARK -> handleMark(tokens, todoList, false);
+        case CMD_TODO -> handleTodo(tokens, todoList);
+        case CMD_DEADLINE -> handleDeadline(tokens, todoList);
+        case CMD_EVENT -> handleEvent(tokens, todoList);
+        case CMD_DELETE -> handleDelete(tokens, todoList);
+        default -> MSG_INVALID;
+        };
     }
 
     /** Manual help text. */
     private String handleManual() {
-        return "todo <task> for a simple todo\n" +
-               "deadline <task> /by <time> for a time that ends by a certain time\n" +
-               "event <task> /from <time> /to <time> for a time that ends by a certain time\n" +
-               "list to show all tasks";
+        return """
+                todo <task> for a simple todo
+                deadline <task> /by <time> for a time that ends by a certain time
+                event <task> /from <time> /to <time> for a time that ends by a certain time
+                list to show all tasks
+                latest to show all tasks from earliest to latest deadline/starting time""";
     }
 
     /** Handles bye command including saving tasks if any exist. */
@@ -169,7 +173,7 @@ public class Parser {
         if (toString.isEmpty()) {
             return MSG_MISSING_TO;
         }
-        EventTask et = new EventTask(description + " ", fromString + " ", toString + " "); // spacing to mirror legacy behavior
+        EventTask et = new EventTask(description + " ", fromString + " ", toString + " ");
         todoList.addTask(et);
         return buildAddResponse(et, todoList.size(), true);
     }
