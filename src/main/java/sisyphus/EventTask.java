@@ -30,6 +30,9 @@ public class EventTask extends Task {
         super(name);
         this.start = parseDateTime(startString.trim());
         this.end = parseDateTime(endString.trim());
+        assert this.start != null : "Start datetime must not be null";
+        assert this.end != null : "End datetime must not be null";
+        assert !this.end.isBefore(this.start) : "Event end must not be before start";
     }
 
     // same as in EventTask

@@ -24,7 +24,10 @@ public class TaskList {
      * @param task the task to add
      */
     public void addTask(Task task) {
+        assert task != null : "Cannot add null task";
+        int oldSize = tasks.size();
         tasks.add(task);
+        assert tasks.size() == oldSize + 1 : "Size should increase by 1 after add";
     }
 
     /**
@@ -33,7 +36,11 @@ public class TaskList {
      * @param number 1-based index of the task to remove
      */
     public void removeTask(int number) {
+        assert number > 0 : "Index must be positive (1-based)";
+        assert number <= tasks.size() : "Index out of bounds for remove";
+        int oldSize = tasks.size();
         tasks.remove(number - 1);
+        assert tasks.size() == oldSize - 1 : "Size should decrease by 1 after remove";
     }
 
     /**
@@ -61,6 +68,8 @@ public class TaskList {
      * @return the task at the index
      */
     public Task get(int index) {
+        assert index > 0 : "Index must be positive (1-based)";
+        assert index <= tasks.size() : "Index out of bounds for get";
         return tasks.get(index - 1);
     }
 

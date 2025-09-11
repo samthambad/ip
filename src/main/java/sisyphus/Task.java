@@ -13,6 +13,8 @@ public class Task {
      * @param name the description/name of the task
      */
     public Task(String name) {
+        assert name != null : "Task name must not be null";
+        assert !name.trim().isEmpty() : "Task name must not be empty";
         this.name = name;
     }
 
@@ -51,13 +53,17 @@ public class Task {
      * Marks this task as completed.
      */
     public void complete() {
+        assert !this.isDone : "Task is already marked as done";
         this.isDone = true;
+        assert this.isDone : "Task should be marked done after complete()";
     }
 
     /**
      * Marks this task as not completed.
      */
     public void incomplete() {
+        assert this.isDone : "Task is already not done";
         this.isDone = false;
+        assert !this.isDone : "Task should be marked not done after incomplete()";
     }
 }
