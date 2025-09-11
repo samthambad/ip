@@ -4,6 +4,33 @@ package sisyphus;
  * Parses user input and performs actions on storage and the in-memory task list.
  */
 public class Parser {
+    // Command literals
+    private static final String CMD_MANUAL = "manual";
+    private static final String CMD_BYE = "bye";
+    private static final String CMD_LIST = "list";
+    private static final String CMD_FIND = "find";
+    private static final String CMD_MARK = "mark";
+    private static final String CMD_UNMARK = "unmark";
+    private static final String CMD_TODO = "todo";
+    private static final String CMD_DEADLINE = "deadline";
+    private static final String CMD_EVENT = "event";
+    private static final String CMD_DELETE = "delete";
+
+    // Common messages
+    private static final String MSG_INVALID = "Invalid command, you are wrong.";
+    private static final String MSG_MISSING_DESC_TODO = "The description of a todo cannot be empty!\n";
+    private static final String MSG_MISSING_DESC_DEADLINE = "The description of a deadline task cannot be empty!\n";
+    private static final String MSG_MISSING_DESC_EVENT = "The description of a event task cannot be empty!";
+    private static final String MSG_MISSING_DEADLINE = "No deadline specified!\n";
+    private static final String MSG_MISSING_FROM = "No from specified!";
+    private static final String MSG_MISSING_TO = "No to specified!";
+    private static final String MSG_TASK_NOT_FOUND_PREFIX = "Task ";
+    private static final String MSG_TASK_NOT_FOUND_SUFFIX = " does not exist";
+    private static final String MSG_DELETE_NOT_SPECIFIED = "Task to delete has not been specified!\n";
+    private static final String MSG_DELETE_INCORRECT = "Incorrect input!\n";
+    private static final String MSG_DELETE_EMPTY = "There aren't any tasks to delete!\n";
+    private static final String MSG_DELETE_NOT_EXIST = "The task to delete does not exist!\n";
+
     /**
      * Parses a tokenized user command and updates storage and the task list accordingly.
      * Supported commands: bye, list, find, mark, unmark, todo, deadline, event, delete.
