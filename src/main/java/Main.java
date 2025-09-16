@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import sisyphus.Sisyphus;
 
 /**
- * A GUI for Duke using FXML.
+ * A GUI for Sisyphus using FXML.
  */
 public class Main extends Application {
 

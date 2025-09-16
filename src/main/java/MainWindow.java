@@ -23,22 +23,22 @@ public class MainWindow extends AnchorPane {
     private Sisyphus sisyphus;
 
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private Image sisyphusImage = new Image(this.getClass().getResourceAsStream("/images/Sisyphus.png"));
 
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        dialogContainer.getChildren().add(DialogBox.getSisyphusDialog(Sisyphus.Ui.introMessage(), dukeImage));
+        dialogContainer.getChildren().add(DialogBox.getSisyphusDialog(Sisyphus.Ui.introMessage(), sisyphusImage));
     }
 
-    /** Injects the Duke instance */
+    /** Injects the Sisyphus instance */
     public void setSisyphus(Sisyphus d) {
         sisyphus = d;
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and then appends them to
-     * the dialog container. Clears the user input after processing.
+     * Creates two dialog boxes, one echoing user input and the other containing Sisyphus's reply and then
+     * appends them to the dialog container. Clears the user input after processing.
      */
     @FXML
     private void handleUserInput() {
@@ -46,7 +46,7 @@ public class MainWindow extends AnchorPane {
         String response = sisyphus.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getSisyphusDialog(response, dukeImage)
+                DialogBox.getSisyphusDialog(response, sisyphusImage)
         );
         userInput.clear();
     }
