@@ -23,5 +23,4 @@ type `manual` to see a list of tasks
 8. Marking / Unmark tasks using `mark <task number>` `unmark <task number>`
 9. Deleting task using `delete <task number>` 
 
-> [!TIP]
-> just use the `manual` for easy reference
+> **Tip:** just use the `manual` for easy reference
