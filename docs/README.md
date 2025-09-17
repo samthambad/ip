@@ -24,3 +24,7 @@ type `manual` to see a list of tasks
 9. Deleting task using `delete <task number>` 
 
 > **Tip:** just use the `manual` for easy reference
+
+## FAQ
+- Does the order have to be the same when inputting an event?
+> Yes 
