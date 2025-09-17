@@ -20,3 +20,8 @@ type `manual` to see a list of tasks
 5. Display the tasks by earliest first using `latest`
 6. Autosave and exit by using `bye`
 7. Reload saved tasks if saved
+8. Marking / Unmark tasks using `mark <task number>` `unmark <task number>`
+9. Deleting task using `delete <task number>` 
+
+> [!TIP]
+> just use the `manual` for easy reference

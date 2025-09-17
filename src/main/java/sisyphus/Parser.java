@@ -69,6 +69,8 @@ public class Parser {
                 deadline <task> /by <time> for a time that ends by a certain time
                 event <task> /from <time> /to <time> for a time that ends by a certain time
                 list to show all tasks
+                delete <task number> to delete task
+                mark <task number> or unmark <task>
                 latest to show all tasks from earliest to latest deadline/starting time""";
     }
 
