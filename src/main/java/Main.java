@@ -20,6 +20,8 @@ public class Main extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap, 1200, 800);
+            scene.getStylesheets().add(Main.class.getResource("/view/styles.css").toExternalForm());
+            ap.getStyleClass().add("root");
             stage.setScene(scene);
             stage.setWidth(1200);
             stage.setHeight(800);

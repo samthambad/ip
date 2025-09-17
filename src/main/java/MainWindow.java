@@ -26,8 +26,16 @@ public class MainWindow extends AnchorPane {
     private Image sisyphusImage = new Image(this.getClass().getResourceAsStream("/images/Sisyphus.png"));
 
     @FXML
+    /**
+     * Initializes the main window controls and bindings.
+     * Ensures the scroll pane follows new messages and the dialog container
+     * fills the available width for responsive resizing.
+     */
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        // Make the scroll content fit width and dialog container responsive
+        scrollPane.setFitToWidth(true);
+        dialogContainer.setFillWidth(true);
         dialogContainer.getChildren().add(DialogBox.getSisyphusDialog(Sisyphus.Ui.introMessage(), sisyphusImage));
     }
 

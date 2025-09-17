@@ -11,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 /**
  * Represents a dialog box consisting of an ImageView to represent the speaker's face
@@ -34,6 +36,15 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(img);
+
+        // Allow the dialog label to take available width and wrap as needed (for normal messages)
+        dialog.setWrapText(true);
+        dialog.setMaxWidth(Double.MAX_VALUE);
+        dialog.setMinHeight(Region.USE_PREF_SIZE);
+        HBox.setHgrow(dialog, Priority.ALWAYS);
+
+        // Base style class for dialog container (used by CSS)
+        getStyleClass().add("dialog-box");
     }
 
     /**
@@ -47,12 +58,15 @@ public class DialogBox extends HBox {
     }
 
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        DialogBox db = new DialogBox(text, img);
+        db.getStyleClass().add("user");
+        return db;
     }
 
     public static DialogBox getSisyphusDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
+        db.getStyleClass().add("bot");
 
         // Normalize tabs, use monospaced font, and disable wrapping for ASCII art
         String mono = text.replace("\t", "    ");
